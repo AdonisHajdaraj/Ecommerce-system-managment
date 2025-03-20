@@ -1,0 +1,59 @@
+.App {
+    text-align: center;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  table th, table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .add-item {
+    margin-bottom: 20px;
+  }
+  
+  .add-item input[type="text"] {
+    padding: 8px;
+    width: 200px;
+    margin-right: 10px;
+  }
+  
+  .add-item button {
+    padding: 8px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .add-item button:hover {
+    background-color: #218838;
+  }
+  
+  .delete-button {
+    background-color: #dc3545;
+  }
+  
+  .delete-button:hover {
+    background-color: #c82333;
+  }
+  
