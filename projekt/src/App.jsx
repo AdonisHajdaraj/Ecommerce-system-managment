@@ -10,6 +10,9 @@ import Logout from './components/logout';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Users from './admin/Users';
+import Tshirt from './admin/Tshirt'
+import AddTshirt from './admin/AddTshirt';
+import EditTshirt from './admin/EditTshirt';
 
 
 import UDashboard from './user/UserDashboard';
@@ -29,7 +32,9 @@ const App = () => {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/sidebar' element={<Sidebar />} />
   
-
+          <Route path='/tshirt' element={<Tshirt />}/>
+          <Route path='/addtshirt' element={<AddTshirt />}/>
+          <Route path='/edittshirt/:id' element={<EditTshirt/>}/>
       
      
           <Route path='/login' element={<Login />}/>

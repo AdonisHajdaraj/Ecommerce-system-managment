@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
-import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaBoxOpen, FaChartLine } from 'react-icons/fa';
+import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaBoxOpen, FaChartLine, FaTshirt } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const USidebar = () => {
@@ -14,8 +14,8 @@ const USidebar = () => {
         <Nav.Link href="user-dashboard" className="d-flex align-items-center text-dark py-2">
           <FaTachometerAlt className="me-2" /> Dashboard
         </Nav.Link>
-        <Nav.Link href="products" className="d-flex align-items-center text-dark py-2">
-          <FaBoxOpen className="me-2" /> Products
+        <Nav.Link href="tshirt" className="d-flex align-items-center text-dark py-2">
+          <FaTshirt className="me-2" /> T-Shirt
         </Nav.Link>
         <Nav.Link href="sales" className="d-flex align-items-center text-dark py-2">
           <FaChartLine className="me-2" /> Sales

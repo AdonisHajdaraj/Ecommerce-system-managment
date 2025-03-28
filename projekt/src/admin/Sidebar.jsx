@@ -1,9 +1,9 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
-import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaBoxOpen, FaChartLine } from 'react-icons/fa';
+import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaBoxOpen, FaChartLine, FaTshirt } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const USidebar = () => {
+const Sidebar = () => {
   return (
     <div className="d-flex flex-column flex-shrink-0 p-3 bg-white shadow-sm" style={{ width: '250px', height: '100vh', position: 'fixed' }}>
       <a href="/" className="d-flex align-items-center mb-3 mb-md-0 text-dark text-decoration-none">
@@ -14,8 +14,8 @@ const USidebar = () => {
         <Nav.Link href="user-dashboard" className="d-flex align-items-center text-dark py-2">
           <FaTachometerAlt className="me-2" /> Dashboard
         </Nav.Link>
-        <Nav.Link href="products" className="d-flex align-items-center text-dark py-2">
-          <FaBoxOpen className="me-2" /> Products
+        <Nav.Link href="tshirt" className="d-flex align-items-center text-dark py-2">
+          <FaTshirt className="me-2" /> T-Shirt
         </Nav.Link>
         <Nav.Link href="sales" className="d-flex align-items-center text-dark py-2">
           <FaChartLine className="me-2" /> Sales
@@ -31,4 +31,4 @@ const USidebar = () => {
   );
 };
 
-export default USidebar;
+export default Sidebar;
