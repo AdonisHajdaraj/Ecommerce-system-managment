@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaBoxOpen, FaChartLine, FaTshirt } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,15 +15,14 @@ const USidebar = () => {
         <Nav.Link href="user-dashboard" className="d-flex align-items-center text-dark py-2">
           <FaTachometerAlt className="me-2" /> Dashboard
         </Nav.Link>
-        <Nav.Link href="tshirt" className="d-flex align-items-center text-dark py-2">
+        <Nav.Link as={Link} to="/user-tshirt" className="d-flex align-items-center text-dark py-2">
           <FaTshirt className="me-2" /> T-Shirt
         </Nav.Link>
-        <Nav.Link href="sales" className="d-flex align-items-center text-dark py-2">
-          <FaChartLine className="me-2" /> Sales
+        <Nav.Link href="/user-shoes" className="d-flex align-items-center text-dark py-2">
+          <FaChartLine className="me-2" /> Shoes
         </Nav.Link>
-        <Nav.Link href="users" className="d-flex align-items-center text-dark py-2">
-          <FaUsers className="me-2" /> Users
-        </Nav.Link>
+      
+
         <Nav.Link href="logout" className="d-flex align-items-center text-danger py-2">
           <FaSignOutAlt className="me-2" /> Logout
         </Nav.Link>

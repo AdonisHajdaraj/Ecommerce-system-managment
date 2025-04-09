@@ -17,6 +17,9 @@ const Sidebar = () => {
         <Nav.Link href="tshirt" className="d-flex align-items-center text-dark py-2">
           <FaTshirt className="me-2" /> T-Shirt
         </Nav.Link>
+        <Nav.Link href="shoes" className="d-flex align-items-center text-danger py-2">
+          <FaSignOutAlt className="me-2" /> Shoes
+        </Nav.Link>
         <Nav.Link href="sales" className="d-flex align-items-center text-dark py-2">
           <FaChartLine className="me-2" /> Sales
         </Nav.Link>
