@@ -22,7 +22,10 @@ const USidebar = () => {
           <FaChartLine className="me-2" /> Shoes
         </Nav.Link>
       
-
+        <Nav.Link href="/user-bag" className="d-flex align-items-center text-dark py-2">
+          <FaChartLine className="me-2" /> Bag
+        </Nav.Link>
+      
         <Nav.Link href="logout" className="d-flex align-items-center text-danger py-2">
           <FaSignOutAlt className="me-2" /> Logout
         </Nav.Link>

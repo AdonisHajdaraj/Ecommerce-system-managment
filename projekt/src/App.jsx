@@ -17,13 +17,15 @@ import AddTshirt from './admin/AddTshirt';
 import EditTshirt from './admin/EditTshirt';
 import AddShoes from './admin/AddShoes';
 import EditShoes from './admin/EditShoes';
-
+import Bag from './admin/Bag'
+import AddBag from './admin/AddBag';
+import EditBag from './admin/EditBag';
 
 import UDashboard from './user/UserDashboard';
 import USidebar from './user/UserSidebar';
 import UserTshirt from './user/UserTshirt';
 import UserShoes from './user/UserShoes';
-
+import UserBag from './user/UserBag';
 
 
 
@@ -57,6 +59,11 @@ const App = () => {
           <Route path='/user-sidebar' element={<USidebar />} />
           <Route path='/user-tshirt' element={<UserTshirt />} />
           <Route path='/user-shoes' element={<UserShoes />} />
+          <Route path='/user-bag' element={<UserBag />} />
+
+          <Route path='/bag' element={<Bag />}/>
+          <Route path='/addbag' element={<AddBag />}/>
+          <Route path='/editbag/:id' element={<EditBag/>}/>
          
         </Routes>
        
