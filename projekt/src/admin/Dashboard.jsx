@@ -33,6 +33,30 @@ const Dashboard = () => {
             <Sidebar />
             <div className="container-fluid p-4" style={{ marginLeft: '250px', flex: 1 }}>
                 <h2 className="mb-4 fw-bold">Dashboard</h2>
+
+                {/* ✅ FOTO skej me skej me lartësi të kufizuar */}
+                <div
+                    className="mb-4"
+                    style={{
+                        position: 'relative',
+                        left: '-28px',
+                        width: 'calc(100% + 250px)'
+                    }}
+                >
+                    <img
+                        src="https://i1.wp.com/billionaire365.com/wp-content/uploads/2019/02/Ecommerce-Website.jpg?fit=2048%2C1452&ssl=1"
+                        alt="Dashboard Image"
+                        className="img-fluid shadow"
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '250px', // mund ta ndryshosh nqs don më të vogël ose më të madhe
+                            objectFit: 'cover',
+                            borderRadius: '0',
+                        }}
+                    />
+                </div>
+
                 <div className="row g-4">
                     <div className="col-lg-8">
                         <div className="card shadow-sm p-4 border-0">
@@ -49,6 +73,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
+
                 <div className="row mt-4">
                     <div className="col-md-6 col-lg-3">
                         <div className="card shadow-sm p-4 border-0">
@@ -75,7 +100,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="row mt-4">
                     <div className="col-md-6">
                         <div className="card shadow-sm p-4 border-0">

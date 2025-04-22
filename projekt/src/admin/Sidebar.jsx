@@ -5,13 +5,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Sidebar = () => {
   return (
-    <div className="d-flex flex-column flex-shrink-0 p-3 bg-white shadow-sm" style={{ width: '250px', height: '100vh', position: 'fixed' }}>
+    <div
+    className="d-flex flex-column flex-shrink-0 p-3 shadow-sm"
+    style={{
+      width: '250px',
+      height: '100vh',
+      position: 'fixed',
+      backgroundColor: '#C0C0C0' // 🎨 ngjyra hint
+    }}
+  >
+
+
+
       <a href="/" className="d-flex align-items-center mb-3 mb-md-0 text-dark text-decoration-none">
         <span className="fs-4 fw-bold">Ecommerce</span>
       </a>
       <hr />
       <Nav className="flex-column">
-        <Nav.Link href="user-dashboard" className="d-flex align-items-center text-dark py-2">
+        <Nav.Link href="dashboard" className="d-flex align-items-center text-dark py-2">
           <FaTachometerAlt className="me-2" /> Dashboard
         </Nav.Link>
         <Nav.Link href="tshirt" className="d-flex align-items-center text-dark py-2">

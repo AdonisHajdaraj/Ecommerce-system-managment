@@ -29,69 +29,81 @@ const UDashboard = () => {
     }, []);
 
     return (
-        <div className="d-flex" style={{ backgroundColor: '#f8f9fa' }}>
+        <div className="d-flex" style={{ backgroundColor: '#C0C0C0' }}>
             <USidebar />
-            <div className="container-fluid p-4" style={{ marginLeft: '250px', flex: 1 }}>
-                <h2 className="mb-4 fw-bold">Dashboard</h2>
+            <div className="container-fluid p-4" style={{ marginLeft: '150px', flex: 1 }}>
+                <h2 className="mb-4 fw-bold" style={{ fontWeight: 'bold', fontSize: '3rem' }}>Dashboard</h2>
+
+
+                 {/* ✅ FOTO skej me skej me lartësi të kufizuar */}
+                 <div
+                    className="mb-4"
+                    style={{
+                        position: 'relative',
+                        left: '-150px',
+                        
+                        width: 'calc(100% + 80px)'
+                    }}
+                >
+                    <img
+                        src="https://i1.wp.com/billionaire365.com/wp-content/uploads/2019/02/Ecommerce-Website.jpg?fit=2048%2C1452&ssl=1"
+                        alt="Dashboard Image"
+                        className="img-fluid shadow"
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '350px', // mund ta ndryshosh nqs don më të vogël ose më të madhe
+                            objectFit: 'cover',
+                            borderRadius: '0',
+                        }}
+                    />
+                </div>
                 <div className="row g-4">
                     <div className="col-lg-8">
                         <div className="card shadow-sm p-4 border-0">
-                            <h5 className="fw-bold">Mirësevini, {userName}!</h5>
-                            <p className="text-muted">Ky është paneli juaj i kontrollit. Menaxhoni të dhënat tuaja dhe shikoni statistikat.</p>
+                            <h5 className="fw-bold" style={{fontSize:'2.7rem'}}>Mirësevini, {userName}:)</h5>
+                            <p className="text-muted" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>Ky është paneli juaj i kontrollit. Menaxhoni të dhënat tuaja dhe shikoni statistikat.</p>
                         </div>
                     </div>
-                    <div className="col-lg-4">
-                        <div className="card shadow-sm p-4 border-0 bg-primary text-white">
-                            <h6 className="fw-bold">Informacioni i përdoruesit</h6>
-                            <p>Email: {userEmail}</p>
-                            <p>ID: {userId}</p>
-                            <p>Roli: {userRole}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="row mt-4">
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card shadow-sm p-4 border-0">
-                            <h6 className="fw-bold">Porositë</h6>
-                            <p className="text-muted">10+ aktive</p>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card shadow-sm p-4 border-0">
-                            <h6 className="fw-bold">Produktet</h6>
-                            <p className="text-muted">50+ në dispozicion</p>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card shadow-sm p-4 border-0">
-                            <h6 className="fw-bold">Të ardhurat</h6>
-                            <p className="text-muted">$5,000 këtë muaj</p>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-lg-3">
-                        <div className="card shadow-sm p-4 border-0">
-                            <h6 className="fw-bold">Vizitorët</h6>
-                            <p className="text-muted">1,200 sot</p>
-                        </div>
-                    </div>
+                    
+                  
                 </div>
                 
                 <div className="row mt-4">
+                    <div className="col-md-6 col-lg-3">
+                        <div className="card shadow-sm p-4 border-0">
+                            <h6 className="fw-bold" style={{fontSize:'2rem'}}>Porositë</h6>
+                            <p className="text-muted" style={{ fontWeight: 'bold', fontSize: '2rem' }}>10k+ aktive</p>
+                        </div>
+                    </div>
+                    <div className="col-md-6 col-lg-3">
+                        <div className="card shadow-sm p-4 border-0">
+                            <h6 className="fw-bold" style={{ fontSize: '2rem' }}>Produktet</h6>
+                            <p className="text-muted" style={{ fontWeight: 'bold', fontSize: '2rem' }}>500k+ në dispozicion</p>
+                        </div>
+                    </div>
+                    <div className="row mt-4">
                     <div className="col-md-6">
                         <div className="card shadow-sm p-4 border-0">
-                            <h6 className="fw-bold">Statistikat e Shitjeve</h6>
-                            <p className="text-muted">Shitje të realizuara këtë muaj: 120</p>
+                            <h6 className="fw-bold" style={{ fontWeight: 'bold', fontSize: '2rem' }}>Transporti</h6>
+        
+                            <p className="text-muted" style={{ fontWeight: 'bold', fontSize: '2rem' }}>Postë e shpejtë: DHL</p>
                         </div>
                     </div>
                     <div className="col-md-6">
                         <div className="card shadow-sm p-4 border-0">
-                            <h6 className="fw-bold">Feedback i Klientëve</h6>
-                            <p className="text-muted">Vlerësimi mesatar: 4.5/5</p>
+                            <h6 className="fw-bold"style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>Feedback i Klientëve</h6>
+                            <p className="text-muted"style={{ fontWeight: 'bold', fontSize: '2rem' }}>Vlerësimi Mesatar :4.5/5</p>
                         </div>
                     </div>
                 </div>
+
+                
+                
+</div>
+                </div>
             </div>
-        </div>
+        
     );
 };
 
