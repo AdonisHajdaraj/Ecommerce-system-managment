@@ -17,9 +17,9 @@ const UserBag = () => {
         };
         fetchAllBag();
     }, []);
-
+    
     return (
-        <div className="d-flex"> 
+        <div className="d-flex" style={{ backgroundColor: '#C0C0C0' }}>
             <USidebar /> 
 
             <div className="container mt-4">
@@ -47,6 +47,7 @@ const UserBag = () => {
             </div>
         </div>
     );
+    
 };
 
 export default UserBag;

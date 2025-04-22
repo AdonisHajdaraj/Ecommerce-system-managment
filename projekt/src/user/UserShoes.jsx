@@ -19,7 +19,7 @@ const UserShoes = () => {
     }, []);
 
     return (
-        <div className="d-flex"> 
+        <div className="d-flex min-vh-100" style={{ backgroundColor: '#C0C0C0' }}>
             <USidebar /> 
 
             <div className="container mt-4">
