@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 const Shoes = () => {
     const [shoes, setShoes] = useState([]);
 
+    // Funksioni që merr të gjitha produktet e këpucëve
     useEffect(() => {
         const fetchAllShoes = async () => {
             try {
@@ -17,12 +18,14 @@ const Shoes = () => {
             }
         };
         fetchAllShoes();
-    }, []);
+    }, []); // Ekzekutohet një herë kur komponenti ngarkohet
 
+    // Funksioni për të fshirë një produkt
     const handleDelete = async (id) => {
         try {
-            await axios.delete("http://localhost:3002/shoes/" + id);
-            setShoes(shoes.filter(shoe => shoe.id !== id)); // ✅ përdor shoe në vend të shoes për njësi
+            await axios.delete(`http://localhost:3002/shoes/${id}`);
+            // Përditëson listën e këpucëve duke fshirë produktin nga state
+            setShoes((prevShoes) => prevShoes.filter(shoe => shoe.id !== id));
         } catch (err) {
             console.log(err);
         }

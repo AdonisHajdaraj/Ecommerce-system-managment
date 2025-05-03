@@ -43,9 +43,10 @@ const USidebar = () => {
         <Nav.Link as={Link} to="/user-bag" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
           <FaShoppingBag className="me-2" /> Bag
         </Nav.Link>
-        <Nav.Link as={Link} to="/user-sale" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
-          <FaChartLine className="me-2" /> Sales
+        <Nav.Link as={Link} to="/user-products" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
+          <FaShoppingBag className="me-2" /> Products
         </Nav.Link>
+       
         <Nav.Link as={Link} to="/logout" className="d-flex align-items-center py-2" style={{ color: '#ff4d4d' }}>
           <FaSignOutAlt className="me-2" /> Logout
         </Nav.Link>

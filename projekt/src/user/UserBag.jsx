@@ -4,28 +4,70 @@ import axios from 'axios';
 import USidebar from './UserSidebar';
 
 const UserBag = () => {
-    const [bag, setBag] = useState([]);
+    const [bags, setBags] = useState([]);
+    const [filtered, setFiltered] = useState([]);
+    const [sortOption, setSortOption] = useState('');
 
     useEffect(() => {
-        const fetchAllBag = async () => {
+        const fetchAllBags = async () => {
             try {
                 const res = await axios.get("http://localhost:3002/bag");
-                setBag(res.data);
+                setBags(res.data);
+                setFiltered(res.data); // Fillon me të gjitha të dhënat
             } catch (err) {
                 console.log(err);
             }
         };
-        fetchAllBag();
+        fetchAllBags();
     }, []);
-    
+
+    useEffect(() => {
+        let sorted = [...filtered];
+        switch (sortOption) {
+            case 'price-low-to-high':
+                sorted.sort((a, b) => a.price - b.price); // Çmimi nga më i ulëti në më të lartin
+                break;
+            case 'price-high-to-low':
+                sorted.sort((a, b) => b.price - a.price); // Çmimi nga më i larti në më të ulët
+                break;
+            default:
+                break;
+        }
+        setFiltered(sorted);
+    }, [sortOption]);
+
+    const handleAddToCart = (bag) => {
+        // Logika për të shtuar Bag në karrocë
+        console.log(`Added to cart: ${bag.name}`);
+    };
+
+    const handleOrderNow = (bag) => {
+        // Logika për të bërë porosinë
+        console.log(`Order placed for: ${bag.name}`);
+    };
+
     return (
-        <div className="d-flex" style={{ backgroundColor: '#C0C0C0' }}>
+        <div className="d-flex min-vh-100" style={{ backgroundColor: '#C0C0C0' }}>
             <USidebar /> 
 
             <div className="container mt-4">
                 <h1 className="mb-4 text-center">Bag Collection</h1>
+                
+                {/* Styled Dropdown for sorting */}
+                <div className="mb-4 d-flex justify-content-center">
+                    <select
+                        className="form-select w-50 shadow rounded-pill text-center"
+                        value={sortOption}
+                        onChange={(e) => setSortOption(e.target.value)}
+                    >
+                        <option value="">⚙️ Filtro sipas Çmimit</option>
+                        <option value="price-low-to-high">💲 Çmimi nga i ulëti në të lartin</option>
+                        <option value="price-high-to-low">💲 Çmimi nga i larti në të ulët</option>
+                    </select>
+                </div>
+
                 <div className="row">
-                    {bag.map(bag => (
+                    {filtered.map(bag => (
                         <div key={bag.id} className="col-md-4 mb-4">
                             <div className="card shadow-sm p-3 text-center">
                                 {bag.cover && (
@@ -39,6 +81,22 @@ const UserBag = () => {
                                 <div className="card-body">
                                     <h5 className="card-title">{bag.name}</h5>
                                     <p className="card-text">${bag.price}</p>
+
+                                    {/* Butonat për "Add to Cart" dhe "Order Now" */}
+                                    <div className="d-flex justify-content-center gap-2 mt-3">
+                                        <button
+                                            className="btn btn-outline-primary btn-sm"
+                                            onClick={() => handleAddToCart(bag)}
+                                        >
+                                            🛒 Add to Cart
+                                        </button>
+                                        <button
+                                            className="btn btn-success btn-sm"
+                                            onClick={() => handleOrderNow(bag)}
+                                        >
+                                            📦 Order Now
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +105,6 @@ const UserBag = () => {
             </div>
         </div>
     );
-    
 };
 
 export default UserBag;

@@ -35,6 +35,11 @@ const Sidebar = () => {
           <Nav.Link href="bag" className="d-flex align-items-center text-dark py-2">
           <FaShoppingBag className="me-2" /> Bag
         </Nav.Link>
+       
+
+<Nav.Link href="products" className="d-flex align-items-center text-dark py-2">
+<FaShoppingBag className="me-2" /> Products
+</Nav.Link>
 
       
         <Nav.Link href="sales" className="d-flex align-items-center text-dark py-2">
@@ -46,7 +51,10 @@ const Sidebar = () => {
         <Nav.Link href="logout" className="d-flex align-items-center text-danger py-2">
           <FaSignOutAlt className="me-2" /> Logout
         </Nav.Link>
+       
+        
       </Nav>
+      
     </div>
   );
 };

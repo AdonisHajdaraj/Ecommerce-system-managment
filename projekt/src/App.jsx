@@ -5,10 +5,10 @@ import './App.css';
 import Dashboard from './admin/Dashboard';
 import Sidebar from './admin/Sidebar'
 
-
 import Logout from './components/logout';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import Products from './admin/Products';
 
 import Shoes from './admin/Shoes'
 import Users from './admin/Users';
@@ -26,6 +26,8 @@ import USidebar from './user/UserSidebar';
 import UserTshirt from './user/UserTshirt';
 import UserShoes from './user/UserShoes';
 import UserBag from './user/UserBag';
+import UProducts from './user/UserProducts';  
+
 
 
 
@@ -40,6 +42,7 @@ const App = () => {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/sidebar' element={<Sidebar />} />
   
+          <Route path='/products' element={<Products/>}/>
           <Route path='/tshirt' element={<Tshirt />}/>
           <Route path='/addtshirt' element={<AddTshirt />}/>
           <Route path='/edittshirt/:id' element={<EditTshirt/>}/>
@@ -60,6 +63,8 @@ const App = () => {
           <Route path='/user-tshirt' element={<UserTshirt />} />
           <Route path='/user-shoes' element={<UserShoes />} />
           <Route path='/user-bag' element={<UserBag />} />
+          <Route path='/user-products' element={<UProducts />} />
+        
 
           <Route path='/bag' element={<Bag />}/>
           <Route path='/addbag' element={<AddBag />}/>

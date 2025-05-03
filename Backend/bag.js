@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// 📌 Get all T-shirts
+// 📌 Get all Bags
 router.get("/", (req, res) => {
   const q = "SELECT * FROM bag";
   db.query(q, (err, data) => {
@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
   });
 });
 
-// 📌 Get a single T-shirt by ID
+// 📌 Get a single Bag by ID
 router.get("/:id", (req, res) => {
   const q = "SELECT * FROM bag WHERE id = ?";
   db.query(q, [req.params.id], (err, data) => {
@@ -34,13 +34,13 @@ router.get("/:id", (req, res) => {
   });
 });
 
-// 📌 Add a new T-shirt with Image Upload
+// 📌 Add a new Bag with Image Upload
 router.post("/", upload.single("cover"), (req, res) => {
   const q = "INSERT INTO bag (`name`, `price`, `cover`) VALUES (?)";
   const values = [
     req.body.name,
     req.body.price,
-    req.file ? `/uploads/${req.file.filename}` : null,
+    req.file ? req.file.filename : null, // ✅ Ruaj vetëm emrin e skedarit
   ];
 
   db.query(q, [values], (err, data) => {
@@ -49,7 +49,7 @@ router.post("/", upload.single("cover"), (req, res) => {
   });
 });
 
-// 📌 Update a T-shirt
+// 📌 Update a Bag
 router.put("/:id", upload.single("cover"), (req, res) => {
   const bagId = req.params.id;
 
@@ -58,7 +58,7 @@ router.put("/:id", upload.single("cover"), (req, res) => {
     if (result.length === 0) return res.status(404).json({ message: "bag not found" });
 
     const oldCover = result[0].cover;
-    const newCover = req.file ? `/uploads/${req.file.filename}` : oldCover;
+    const newCover = req.file ? req.file.filename : oldCover;
 
     const q = "UPDATE bag SET `name` = ?, `price` = ?, `cover` = ? WHERE id = ?";
     const values = [req.body.name, req.body.price, newCover, bagId];
@@ -70,7 +70,7 @@ router.put("/:id", upload.single("cover"), (req, res) => {
   });
 });
 
-// 📌 Delete a T-shirt
+// 📌 Delete a Bag
 router.delete("/:id", (req, res) => {
   const q = "DELETE FROM bag WHERE id = ?";
   db.query(q, [req.params.id], (err, data) => {

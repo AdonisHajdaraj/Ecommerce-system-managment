@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs"); // Përdoret për të fshirë skedarët
 const db = require("./db");
 
 // 🛠 Configure Multer for File Uploads
@@ -15,7 +16,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// 📌 Get all T-shirts
+// 📌 Get all Shoes
 router.get("/", (req, res) => {
   const q = "SELECT * FROM shoes";
   db.query(q, (err, data) => {
@@ -24,17 +25,17 @@ router.get("/", (req, res) => {
   });
 });
 
-// 📌 Get a single T-shirt by ID
+// 📌 Get a single Shoe by ID
 router.get("/:id", (req, res) => {
   const q = "SELECT * FROM shoes WHERE id = ?";
   db.query(q, [req.params.id], (err, data) => {
     if (err) return res.json(err);
-    if (data.length === 0) return res.status(404).json({ message: "shoes not found" });
+    if (data.length === 0) return res.status(404).json({ message: "shoe not found" });
     return res.json(data[0]);
   });
 });
 
-// 📌 Add a new T-shirt with Image Upload
+// 📌 Add a new Shoe with Image Upload
 router.post("/", upload.single("cover"), (req, res) => {
   const q = "INSERT INTO shoes (`name`, `price`, `cover`) VALUES (?)";
   const values = [
@@ -45,37 +46,55 @@ router.post("/", upload.single("cover"), (req, res) => {
 
   db.query(q, [values], (err, data) => {
     if (err) return res.json(err);
-    return res.json({ message: "shoes has been created" });
+    return res.json({ message: "shoe has been created" });
   });
 });
 
-// 📌 Update a T-shirt
+// 📌 Update a Shoe
 router.put("/:id", upload.single("cover"), (req, res) => {
-  const tshirtId = req.params.id;
+  const shoeId = req.params.id;
 
-  db.query("SELECT cover FROM shoes WHERE id = ?", [tshirtId], (err, result) => {
+  db.query("SELECT cover FROM shoes WHERE id = ?", [shoeId], (err, result) => {
     if (err) return res.json(err);
-    if (result.length === 0) return res.status(404).json({ message: "shoes not found" });
+    if (result.length === 0) return res.status(404).json({ message: "shoe not found" });
 
     const oldCover = result[0].cover;
     const newCover = req.file ? `/uploads/${req.file.filename}` : oldCover;
 
     const q = "UPDATE shoes SET `name` = ?, `price` = ?, `cover` = ? WHERE id = ?";
-    const values = [req.body.name, req.body.price, newCover, tshirtId];
+    const values = [req.body.name, req.body.price, newCover, shoeId];
 
     db.query(q, values, (err, data) => {
       if (err) return res.json(err);
-      return res.json({ message: "shoes updated successfully" });
+      // Fshi skedarin e vjetër nëse ekziston
+      if (oldCover && fs.existsSync(path.join(__dirname, '..', oldCover))) {
+        fs.unlinkSync(path.join(__dirname, '..', oldCover));
+      }
+      return res.json({ message: "shoe updated successfully" });
     });
   });
 });
 
-// 📌 Delete a T-shirt
+// 📌 Delete a Shoe
 router.delete("/:id", (req, res) => {
-  const q = "DELETE FROM shoes WHERE id = ?";
-  db.query(q, [req.params.id], (err, data) => {
+  // Gjejmë coverin e produktit që do të fshihet
+  db.query("SELECT cover FROM shoes WHERE id = ?", [req.params.id], (err, result) => {
     if (err) return res.json(err);
-    return res.json({ message: "shoes deleted successfully" });
+    if (result.length === 0) return res.status(404).json({ message: "shoe not found" });
+
+    const coverToDelete = result[0].cover;
+    
+    const q = "DELETE FROM shoes WHERE id = ?";
+    db.query(q, [req.params.id], (err, data) => {
+      if (err) return res.json(err);
+      
+      // Fshi skedarin e imazhit nga disk nëse ekziston
+      if (coverToDelete && fs.existsSync(path.join(__dirname, '..', coverToDelete))) {
+        fs.unlinkSync(path.join(__dirname, '..', coverToDelete));
+      }
+      
+      return res.json({ message: "shoe deleted successfully" });
+    });
   });
 });
 
