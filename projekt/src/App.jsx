@@ -21,12 +21,14 @@ import Bag from './admin/Bag'
 import AddBag from './admin/AddBag';
 import EditBag from './admin/EditBag';
 
+
 import UDashboard from './user/UserDashboard';
 import USidebar from './user/UserSidebar';
 import UserTshirt from './user/UserTshirt';
 import UserShoes from './user/UserShoes';
 import UserBag from './user/UserBag';
 import UProducts from './user/UserProducts';  
+import UserCart from './user/UserCart';
 
 
 
@@ -47,6 +49,7 @@ const App = () => {
           <Route path='/addtshirt' element={<AddTshirt />}/>
           <Route path='/edittshirt/:id' element={<EditTshirt/>}/>
           
+          
       
           <Route path='/addshoes' element={<AddShoes />}/>
           <Route path='/editshoes/:id' element={<EditShoes/>}/>
@@ -54,6 +57,7 @@ const App = () => {
           <Route path='/login' element={<Login />}/>
           <Route path='/signup' element={<Signup />}/>
           <Route path='/users' element={<Users />}/>
+
      
           <Route path='/logout' element={<Logout />} />
         
@@ -64,6 +68,7 @@ const App = () => {
           <Route path='/user-shoes' element={<UserShoes />} />
           <Route path='/user-bag' element={<UserBag />} />
           <Route path='/user-products' element={<UProducts />} />
+          <Route path='/user-cart' element={<UserCart />} />
         
 
           <Route path='/bag' element={<Bag />}/>

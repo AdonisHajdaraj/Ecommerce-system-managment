@@ -37,19 +37,15 @@ function UProducts() {
     console.log(`Added to cart: ${product.lloji}`);
   };
 
-  const handleOrderNow = (product) => {
-    // Logika për të bërë porosinë
-    console.log(`Order placed for: ${product.lloji}`);
-  };
+  
 
   return (
-    <div className="container-fluid py-5">
-      <div className="row">
-        <div className="col-md-3">
+    <div className="d-flex min-vh-100" style={{ backgroundColor: '#C0C0C0' }}>
+      
           <Sidebar />
-        </div>
+        
 
-        <div className="col-md-9">
+        <div className="container mt-4">
           <h2 className="mb-4 text-center">🛍️ Llojet e Produkteve</h2>
 
           {/* Styled Dropdown */}
@@ -88,12 +84,7 @@ function UProducts() {
                       >
                         🛒 Add to Cart
                       </button>
-                      <button
-                        className="btn btn-success btn-sm"
-                        onClick={() => handleOrderNow(produkt)}
-                      >
-                        📦 Order Now
-                      </button>
+                      
                     </div>
                   </div>
                 </div>
@@ -103,7 +94,7 @@ function UProducts() {
 
         </div>
       </div>
-    </div>
+    
   );
 }
 

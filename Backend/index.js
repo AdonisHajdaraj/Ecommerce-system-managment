@@ -9,6 +9,7 @@ const tshirtRoutes = require("./tshirt");
 const shoesRoutes = require("./shoes"); // Importo tshirt
 const bagRoutes = require("./bag"); // Importo tshirt
 const produktetRoutes = require('./products');
+const orderRoutes = require("./order");
 
 app.use(express.json());
 app.use(cors());
@@ -19,6 +20,7 @@ app.use("/tshirt", tshirtRoutes); // ✅ Përdor tshirt.js
 app.use("/shoes", shoesRoutes); // ✅ Përdor tshirt.js
 app.use("/bag", bagRoutes); // ✅
 app.use("/produktet", produktetRoutes); // ✅
+app.use("/api", orderRoutes);
 
 
 

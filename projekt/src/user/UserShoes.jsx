@@ -38,13 +38,24 @@ const UserShoes = () => {
 
     const handleAddToCart = (shoe) => {
         // Logika për të shtuar Shoe në karrocë
-        console.log(`Added to cart: ${shoe.name}`);
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        const newItem = {
+            id: shoe.id,
+            name: shoe.name,
+            price: shoe.price,
+            image: shoe.cover,
+            quantity: 1,
+            size: 36,
+            type: 'shoe'
+        };
+
+        cart.push(newItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert(`✅ "${shoe.name}" u shtua në shportë!`);
     };
 
-    const handleOrderNow = (shoe) => {
-        // Logika për të bërë porosinë
-        console.log(`Order placed for: ${shoe.name}`);
-    };
+    
 
     return (
         <div className="d-flex min-vh-100" style={{ backgroundColor: '#C0C0C0' }}>
@@ -90,12 +101,7 @@ const UserShoes = () => {
                                         >
                                             🛒 Add to Cart
                                         </button>
-                                        <button
-                                            className="btn btn-success btn-sm"
-                                            onClick={() => handleOrderNow(shoe)}
-                                        >
-                                            📦 Order Now
-                                        </button>
+                                        
                                     </div>
                                 </div>
                             </div>

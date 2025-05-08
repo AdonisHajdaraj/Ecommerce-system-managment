@@ -13,7 +13,7 @@ const UserTshirt = () => {
             try {
                 const res = await axios.get("http://localhost:3002/tshirt");
                 setTshirts(res.data);
-                setFiltered(res.data); // Fillon me të gjitha të dhënat
+                setFiltered(res.data);
             } catch (err) {
                 console.log(err);
             }
@@ -25,10 +25,10 @@ const UserTshirt = () => {
         let sorted = [...filtered];
         switch (sortOption) {
             case 'price-low-to-high':
-                sorted.sort((a, b) => a.price - b.price); // Çmimi nga më i ulëti në më të lartin
+                sorted.sort((a, b) => a.price - b.price);
                 break;
             case 'price-high-to-low':
-                sorted.sort((a, b) => b.price - a.price); // Çmimi nga më i larti në më të ulët
+                sorted.sort((a, b) => b.price - a.price);
                 break;
             default:
                 break;
@@ -37,23 +37,31 @@ const UserTshirt = () => {
     }, [sortOption]);
 
     const handleAddToCart = (tshirt) => {
-        // Logika për të shtuar T-shirt në karrocë
-        console.log(`Added to cart: ${tshirt.name}`);
-    };
+        // Logika për të shtuar Shoe në karrocë
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    const handleOrderNow = (tshirt) => {
-        // Logika për të bërë porosinë
-        console.log(`Order placed for: ${tshirt.name}`);
+        const newItem = {
+            id: tshirt.id,
+            name: tshirt.name,
+            price: tshirt.price,
+            image: tshirt.cover,
+            quantity: 1,
+            size: 'M',
+            type: 'tshirt'
+        };
+
+        cart.push(newItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert(`✅ "${tshirt.name}" u shtua në shportë!`);
     };
 
     return (
         <div className="d-flex min-vh-100" style={{ backgroundColor: '#C0C0C0' }}>
-            <USidebar /> 
+            <USidebar />
 
             <div className="container mt-4">
                 <h1 className="mb-4 text-center">T-Shirts Collection</h1>
-                
-                {/* Styled Dropdown for sorting */}
+
                 <div className="mb-4 d-flex justify-content-center">
                     <select
                         className="form-select w-50 shadow rounded-pill text-center"
@@ -82,19 +90,12 @@ const UserTshirt = () => {
                                     <h5 className="card-title">{tshirt.name}</h5>
                                     <p className="card-text">${tshirt.price}</p>
 
-                                    {/* Butonat për "Add to Cart" dhe "Order Now" */}
                                     <div className="d-flex justify-content-center gap-2 mt-3">
                                         <button
                                             className="btn btn-outline-primary btn-sm"
                                             onClick={() => handleAddToCart(tshirt)}
                                         >
                                             🛒 Add to Cart
-                                        </button>
-                                        <button
-                                            className="btn btn-success btn-sm"
-                                            onClick={() => handleOrderNow(tshirt)}
-                                        >
-                                            📦 Order Now
                                         </button>
                                     </div>
                                 </div>

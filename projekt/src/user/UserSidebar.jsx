@@ -9,7 +9,9 @@ import {
   FaChartLine,
   FaTshirt,
   FaShoePrints,
-  FaShoppingBag
+  FaShoppingBag,
+  FaShoppingCart,
+  FaChartBar
 } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -32,8 +34,13 @@ const USidebar = () => {
       <hr className="border-light" />
       <Nav className="flex-column">
         <Nav.Link as={Link} to="/user-dashboard" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
-          <FaTachometerAlt className="me-2" /> Dashboard
+          <FaChartBar className="me-2" /> Dashboard
         </Nav.Link>
+        {/*
+        <Nav.Link as={Link} to="/user-products" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
+          <FaBoxOpen className="me-2" /> Products
+        </Nav.Link>
+        */}
         <Nav.Link as={Link} to="/user-tshirt" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
           <FaTshirt className="me-2" /> T-Shirt
         </Nav.Link>
@@ -43,9 +50,10 @@ const USidebar = () => {
         <Nav.Link as={Link} to="/user-bag" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
           <FaShoppingBag className="me-2" /> Bag
         </Nav.Link>
-        <Nav.Link as={Link} to="/user-products" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
-          <FaShoppingBag className="me-2" /> Products
+        <Nav.Link as={Link} to="/user-cart" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
+          <FaShoppingCart className="me-2" /> Cart
         </Nav.Link>
+        
        
         <Nav.Link as={Link} to="/logout" className="d-flex align-items-center py-2" style={{ color: '#ff4d4d' }}>
           <FaSignOutAlt className="me-2" /> Logout

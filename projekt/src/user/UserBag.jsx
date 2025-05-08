@@ -37,14 +37,24 @@ const UserBag = () => {
     }, [sortOption]);
 
     const handleAddToCart = (bag) => {
-        // Logika për të shtuar Bag në karrocë
-        console.log(`Added to cart: ${bag.name}`);
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        const newItem = {
+            id: bag.id,
+            name: bag.name,
+            price: bag.price,
+            image: bag.cover,
+            quantity: 1,
+            size: "-",
+            type: 'bag'
+        };
+
+        cart.push(newItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert(`✅ "${bag.name}" u shtua në shportë!`);
     };
 
-    const handleOrderNow = (bag) => {
-        // Logika për të bërë porosinë
-        console.log(`Order placed for: ${bag.name}`);
-    };
+    
 
     return (
         <div className="d-flex min-vh-100" style={{ backgroundColor: '#C0C0C0' }}>
@@ -90,12 +100,7 @@ const UserBag = () => {
                                         >
                                             🛒 Add to Cart
                                         </button>
-                                        <button
-                                            className="btn btn-success btn-sm"
-                                            onClick={() => handleOrderNow(bag)}
-                                        >
-                                            📦 Order Now
-                                        </button>
+                                        
                                     </div>
                                 </div>
                             </div>

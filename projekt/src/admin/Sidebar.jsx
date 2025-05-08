@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
-import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaBoxOpen, FaChartLine, FaTshirt ,FaShoePrints,FaShoppingBag} from 'react-icons/fa';
+import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaBoxOpen, FaChartLine, FaTshirt ,FaShoePrints,FaShoppingBag, FaShoppingCart} from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Sidebar = () => {
@@ -25,6 +25,8 @@ const Sidebar = () => {
         <Nav.Link href="dashboard" className="d-flex align-items-center text-dark py-2">
           <FaTachometerAlt className="me-2" /> Dashboard
         </Nav.Link>
+        
+
         <Nav.Link href="tshirt" className="d-flex align-items-center text-dark py-2">
           <FaTshirt className="me-2" /> T-Shirt
         </Nav.Link>
@@ -34,17 +36,21 @@ const Sidebar = () => {
 
           <Nav.Link href="bag" className="d-flex align-items-center text-dark py-2">
           <FaShoppingBag className="me-2" /> Bag
-        </Nav.Link>
-       
+          </Nav.Link>
 
-<Nav.Link href="products" className="d-flex align-items-center text-dark py-2">
-<FaShoppingBag className="me-2" /> Products
-</Nav.Link>
+       
+      {/*
+      <Nav.Link href="products" className="d-flex align-items-center text-dark py-2">
+      <FaShoppingBag className="me-2" /> Products
+      </Nav.Link>
+      
 
       
         <Nav.Link href="sales" className="d-flex align-items-center text-dark py-2">
           <FaChartLine className="me-2" /> Sales
         </Nav.Link>
+        */}
+
         <Nav.Link href="users" className="d-flex align-items-center text-dark py-2">
           <FaUsers className="me-2" /> Users
         </Nav.Link>
