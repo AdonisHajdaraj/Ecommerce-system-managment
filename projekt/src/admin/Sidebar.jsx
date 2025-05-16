@@ -58,7 +58,13 @@ const Sidebar = () => {
           <FaSignOutAlt className="me-2" /> Logout
         </Nav.Link>
        
-        
+        <Nav.Link href="admin-orders" className="d-flex align-items-center text-dark py-2">
+          <FaShoppingCart className="me-2" /> Orders
+ </Nav.Link>
+
+
+
+
       </Nav>
       
     </div>

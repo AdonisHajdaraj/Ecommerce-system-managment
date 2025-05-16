@@ -20,7 +20,7 @@ import EditShoes from './admin/EditShoes';
 import Bag from './admin/Bag'
 import AddBag from './admin/AddBag';
 import EditBag from './admin/EditBag';
-
+import AdminOrders from './admin/AdminOrders';
 
 import UDashboard from './user/UserDashboard';
 import USidebar from './user/UserSidebar';
@@ -29,6 +29,13 @@ import UserShoes from './user/UserShoes';
 import UserBag from './user/UserBag';
 import UProducts from './user/UserProducts';  
 import UserCart from './user/UserCart';
+
+
+
+
+
+
+
 
 
 
@@ -74,7 +81,7 @@ const App = () => {
           <Route path='/bag' element={<Bag />}/>
           <Route path='/addbag' element={<AddBag />}/>
           <Route path='/editbag/:id' element={<EditBag/>}/>
-         
+          <Route path='/admin-orders' element={<AdminOrders/>}/>
         </Routes>
        
 

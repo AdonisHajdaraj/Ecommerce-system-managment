@@ -62,6 +62,35 @@ router.post("/order", (req, res) => {
 });
 
 
+//admin view orders
+router.get("/order", (req, res) => {
+  const sql = "SELECT * FROM orders ORDER BY created_at DESC";
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching orders:", err);
+      return res.status(500).json({ message: "Failed to fetch orders" });
+    }
+    res.status(200).json(results);
+  });
+});
+
+// admin delete order
+router.delete("/order/:id", (req, res) => {
+  const orderId = req.params.id;
+
+  const sql = "DELETE FROM orders WHERE id = ?";
+  db.query(sql, [orderId], (err, result) => {
+    if (err) {
+      console.error("Error deleting order:", err);
+      return res.status(500).json({ message: "Failed to delete order" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    res.status(200).json({ message: "Order deleted successfully" });
+  });
+});
 
 
 
