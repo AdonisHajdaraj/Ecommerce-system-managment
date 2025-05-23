@@ -3,22 +3,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import USidebar from './UserSidebar';
 
-const UserBag = () => {
-    const [bags, setBags] = useState([]);
+const UserPantsKids = () => {
+    const [pantsKids, setPantsKids] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [sortOption, setSortOption] = useState('');
 
     useEffect(() => {
-        const fetchAllBags = async () => {
+        const fetchAllPantsKids = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/bag");
-                setBags(res.data);
+                const res = await axios.get("http://localhost:3002/pantskids");
+                setPantsKids(res.data);
                 setFiltered(res.data); // Fillon me të gjitha të dhënat
             } catch (err) {
                 console.log(err);
             }
         };
-        fetchAllBags();
+        fetchAllPantsKids();
     }, []);
 
     useEffect(() => {
@@ -36,22 +36,23 @@ const UserBag = () => {
         setFiltered(sorted);
     }, [sortOption]);
 
-    const handleAddToCart = (bag) => {
+    const handleAddToCart = (pantKids) => {
+        // Logika për të shtuar pant në karrocë
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         const newItem = {
-            id: bag.id,
-            name: bag.name,
-            price: bag.price,
-            image: bag.cover,
+            id: pantKids.id,
+            name: pantKids.name,
+            price: pantKids.price,
+            image: pantKids.cover,
             quantity: 1,
-            size: "-",
-            type: 'bag'
+            size: 110,
+            type: 'pantskids'
         };
 
         cart.push(newItem);
         localStorage.setItem('cart', JSON.stringify(cart));
-        alert(`✅ "${bag.name}" u shtua në shportë!`);
+        alert(`✅ "${pantKids.name}" u shtua në shportë!`);
     };
 
     
@@ -61,7 +62,7 @@ const UserBag = () => {
             <USidebar /> 
 
             <div className="container mt-4">
-                <h1 className="mb-4 text-center">Bag Collection</h1>
+                <h1 className="mb-4 text-center">Pants For Kids</h1>
                 
                 {/* Styled Dropdown for sorting */}
                 <div className="mb-4 d-flex justify-content-center">
@@ -77,26 +78,26 @@ const UserBag = () => {
                 </div>
 
                 <div className="row">
-                    {filtered.map(bag => (
-                        <div key={bag.id} className="col-md-4 mb-4">
+                    {filtered.map(pantKids => (
+                        <div key={pantKids.id} className="col-md-4 mb-4">
                             <div className="card shadow-sm p-3 text-center">
-                                {bag.cover && (
+                                {pantKids.cover && (
                                     <img
-                                        src={`http://localhost:3002${bag.cover}`}
-                                        alt={bag.name}
+                                        src={`http://localhost:3002${pantKids.cover}`}
+                                        alt={pantKids.name}
                                         className="card-img-top"
                                         style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                                     />
                                 )}
                                 <div className="card-body">
-                                    <h5 className="card-title">{bag.name}</h5>
-                                    <p className="card-text">${bag.price}</p>
+                                    <h5 className="card-title">{pantKids.name}</h5>
+                                    <p className="card-text">${pantKids.price}</p>
 
                                     {/* Butonat për "Add to Cart" dhe "Order Now" */}
                                     <div className="d-flex justify-content-center gap-2 mt-3">
                                         <button
                                             className="btn btn-outline-primary btn-sm"
-                                            onClick={() => handleAddToCart(bag)}
+                                            onClick={() => handleAddToCart(pantKids)}
                                         >
                                             🛒 Add to Cart
                                         </button>
@@ -112,4 +113,4 @@ const UserBag = () => {
     );
 };
 
-export default UserBag;
+export default UserPantsKids;

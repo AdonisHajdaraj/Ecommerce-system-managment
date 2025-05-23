@@ -3,32 +3,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import USidebar from './UserSidebar';
 
-const UserBag = () => {
-    const [bags, setBags] = useState([]);
+const UserHoodieMen = () => {
+    const [hoodies, setHoodies] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [sortOption, setSortOption] = useState('');
 
     useEffect(() => {
-        const fetchAllBags = async () => {
+        const fetchAllHoodies = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/bag");
-                setBags(res.data);
-                setFiltered(res.data); // Fillon me të gjitha të dhënat
+                const res = await axios.get("http://localhost:3002/hoodie");
+                setHoodies(res.data);
+                setFiltered(res.data);
             } catch (err) {
                 console.log(err);
             }
         };
-        fetchAllBags();
+        fetchAllHoodies();
     }, []);
 
     useEffect(() => {
         let sorted = [...filtered];
         switch (sortOption) {
             case 'price-low-to-high':
-                sorted.sort((a, b) => a.price - b.price); // Çmimi nga më i ulëti në më të lartin
+                sorted.sort((a, b) => a.price - b.price);
                 break;
             case 'price-high-to-low':
-                sorted.sort((a, b) => b.price - a.price); // Çmimi nga më i larti në më të ulët
+                sorted.sort((a, b) => b.price - a.price);
                 break;
             default:
                 break;
@@ -36,34 +36,32 @@ const UserBag = () => {
         setFiltered(sorted);
     }, [sortOption]);
 
-    const handleAddToCart = (bag) => {
+    const handleAddToCart = (hoodie) => {
+        // Logika për të shtuar Shoe në karrocë
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         const newItem = {
-            id: bag.id,
-            name: bag.name,
-            price: bag.price,
-            image: bag.cover,
+            id: hoodie.id,
+            name: hoodie.name,
+            price: hoodie.price,
+            image: hoodie.cover,
             quantity: 1,
-            size: "-",
-            type: 'bag'
+            size: 'M',
+            type: 'hoodie'
         };
 
         cart.push(newItem);
         localStorage.setItem('cart', JSON.stringify(cart));
-        alert(`✅ "${bag.name}" u shtua në shportë!`);
+        alert(`✅ "${hoodie.name}" u shtua në shportë!`);
     };
-
-    
 
     return (
         <div className="d-flex min-vh-100" style={{ backgroundColor: '#F0F0F0' }}>
-            <USidebar /> 
+            <USidebar />
 
             <div className="container mt-4">
-                <h1 className="mb-4 text-center">Bag Collection</h1>
-                
-                {/* Styled Dropdown for sorting */}
+                <h1 className="mb-4 text-center">Hoodies for Men</h1>
+
                 <div className="mb-4 d-flex justify-content-center">
                     <select
                         className="form-select w-50 shadow rounded-pill text-center"
@@ -77,30 +75,28 @@ const UserBag = () => {
                 </div>
 
                 <div className="row">
-                    {filtered.map(bag => (
-                        <div key={bag.id} className="col-md-4 mb-4">
+                    {filtered.map(hoodie => (
+                        <div key={hoodie.id} className="col-md-4 mb-4">
                             <div className="card shadow-sm p-3 text-center">
-                                {bag.cover && (
+                                {hoodie.cover && (
                                     <img
-                                        src={`http://localhost:3002${bag.cover}`}
-                                        alt={bag.name}
+                                        src={`http://localhost:3002${hoodie.cover}`}
+                                        alt={hoodie.name}
                                         className="card-img-top"
                                         style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                                     />
                                 )}
                                 <div className="card-body">
-                                    <h5 className="card-title">{bag.name}</h5>
-                                    <p className="card-text">${bag.price}</p>
+                                    <h5 className="card-title">{hoodie.name}</h5>
+                                    <p className="card-text">${hoodie.price}</p>
 
-                                    {/* Butonat për "Add to Cart" dhe "Order Now" */}
                                     <div className="d-flex justify-content-center gap-2 mt-3">
                                         <button
                                             className="btn btn-outline-primary btn-sm"
-                                            onClick={() => handleAddToCart(bag)}
+                                            onClick={() => handleAddToCart(hoodie)}
                                         >
                                             🛒 Add to Cart
                                         </button>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -112,4 +108,4 @@ const UserBag = () => {
     );
 };
 
-export default UserBag;
+export default UserHoodieMen;

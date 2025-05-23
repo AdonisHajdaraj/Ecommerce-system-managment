@@ -100,51 +100,142 @@ const UserCart = () => {
                             {cartItems.map((item, index) => (
                                 <tr key={index}>
                                     <td>
-                                        <img
-                                            src={`http://localhost:3002${item.image}`}
-                                            alt={item.name}
-                                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
-                                        />
+                                    <img
+                                        src={`http://localhost:3002${item.image}`}
+                                        alt={item.name}
+                                        style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                                    />
                                     </td>
                                     <td>{item.name}</td>
                                     <td>
                                     {item.type === 'shoe' ? (
-                                        <select value={item.size} onChange={(e) => handleSizeChange(index, e.target.value)} className="form-select">
-                                            {[...Array(9)].map((_, i) => {
-                                                const size = 36 + i;
-                                                return <option key={size} value={size}>{size}</option>;
-                                            })}
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        {[...Array(6)].map((_, i) => {
+                                            const size = 40 + i;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
                                         </select>
-                                    ) : item.type === 'tshirt' ? (
-                                        <select value={item.size} onChange={(e) => handleSizeChange(index, e.target.value)} className="form-select">
-                                            <option value="S">S</option>
-                                            <option value="M">M</option>
-                                            <option value="L">L</option>
-                                            <option value="XL">XL</option>
+                                    ) : item.type === 'tshirt' ||  item.type === 'hoodie'  ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
                                         </select>
-                                    ) : (
+                                    ) : item.type === 'tshirtwomen' ||  item.type === 'hoodiewomen' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        <option value="S">XS</option>
+                                        <option value="M">S</option>
+                                        <option value="L">M</option>
+                                        <option value="XL">L</option>
+                                        </select>                                    
+                                    ) : item.type === 'tshirtkids' || item.type === 'hoodiekids' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        <option value="XXS">XXS</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        </select>
+                                    ) : item.type === 'shoewomen' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(5)].map((_, i) => {
+                                            const size = 36 + i;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ):  item.type === 'shoekids' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(6)].map((_, i) => {
+                                            const size = 30 + i;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) : item.type === 'pants' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(13)].map((_, i) => {
+                                            const size = 40 + i * 2;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) : item.type === 'pantswomen' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(13)].map((_, i) => {
+                                            const size = 30 + i * 2;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) : item.type === 'pantskids' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(15)].map((_, i) => {
+                                            const size = 92 + i * 6;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) :
+                                    
+                                    (
                                         <input className="form-control" value="-" disabled />
                                     )}
-                                    
                                     </td>
                                     <td>
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            value={item.quantity}
-                                            onChange={(e) => handleQuantityChange(index, e.target.value)}
-                                            className="form-control"
-                                        />
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={item.quantity}
+                                        onChange={(e) => handleQuantityChange(index, e.target.value)}
+                                        className="form-control"
+                                    />
                                     </td>
                                     <td>${item.price}</td>
                                     <td>${(item.price * item.quantity).toFixed(2)}</td>
                                     <td>
-                                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>
-                                            🗑 Delete
-                                        </button>
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>
+                                        🗑 Delete
+                                    </button>
                                     </td>
                                 </tr>
-                            ))}
+                                ))}
+
                         </tbody>
                     </table>
                 )}

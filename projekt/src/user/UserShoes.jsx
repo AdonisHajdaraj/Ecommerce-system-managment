@@ -58,11 +58,11 @@ const UserShoes = () => {
     
 
     return (
-        <div className="d-flex min-vh-100" style={{ backgroundColor: '#C0C0C0' }}>
+        <div className="d-flex min-vh-100" style={{ backgroundColor: '#F0F0F0' }}>
             <USidebar /> 
 
             <div className="container mt-4">
-                <h1 className="mb-4 text-center">Shoes Collection</h1>
+                <h1 className="mb-4 text-center">Shoes For Men</h1>
                 
                 {/* Styled Dropdown for sorting */}
                 <div className="mb-4 d-flex justify-content-center">
