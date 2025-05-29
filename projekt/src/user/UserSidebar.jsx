@@ -232,6 +232,7 @@ const USidebar = () => {
         <Nav.Link as={Link} to="/logout" className="d-flex align-items-center py-2" style={{ color: '#ff4d4d' }}>
           <FaSignOutAlt className="me-2" /> Logout
         </Nav.Link>
+      
       </Nav>
     </div>
   );

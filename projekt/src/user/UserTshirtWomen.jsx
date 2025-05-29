@@ -7,6 +7,7 @@ const UserTshirtWomen = () => {
     const [tshirtsWomen, setTshirtsWomen] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [sortOption, setSortOption] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // ✅ për kërkim
 
     useEffect(() => {
         const fetchAllTshirtsWomen = async () => {
@@ -22,22 +23,29 @@ const UserTshirtWomen = () => {
     }, []);
 
     useEffect(() => {
-        let sorted = [...filtered];
+        let filteredData = [...tshirtsWomen];
+
+        if (searchTerm.trim() !== '') {
+            filteredData = filteredData.filter(t =>
+                t.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
         switch (sortOption) {
             case 'price-low-to-high':
-                sorted.sort((a, b) => a.price - b.price);
+                filteredData.sort((a, b) => a.price - b.price);
                 break;
             case 'price-high-to-low':
-                sorted.sort((a, b) => b.price - a.price);
+                filteredData.sort((a, b) => b.price - a.price);
                 break;
             default:
                 break;
         }
-        setFiltered(sorted);
-    }, [sortOption]);
+
+        setFiltered(filteredData);
+    }, [searchTerm, sortOption, tshirtsWomen]);
 
     const handleAddToCart = (tshirtWomen) => {
-        // Logika për të shtuar Shoe në karrocë
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         const newItem = {
@@ -62,6 +70,18 @@ const UserTshirtWomen = () => {
             <div className="container mt-4">
                 <h1 className="mb-4 text-center">T-Shirts for Women</h1>
 
+                {/* 🔍 Kërkim */}
+                <div className="mb-3 d-flex justify-content-center">
+                    <input
+                        type="text"
+                        className="form-control w-50 shadow-sm rounded-pill text-center"
+                        placeholder="🔍 Kërko t-shirt për femra..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
+                {/* Filtro sipas çmimit */}
                 <div className="mb-4 d-flex justify-content-center">
                     <select
                         className="form-select w-50 shadow rounded-pill text-center"
@@ -75,33 +95,37 @@ const UserTshirtWomen = () => {
                 </div>
 
                 <div className="row">
-                    {filtered.map(tshirtWomen => (
-                        <div key={tshirtWomen.id} className="col-md-4 mb-4">
-                            <div className="card shadow-sm p-3 text-center">
-                                {tshirtWomen.cover && (
-                                    <img
-                                        src={`http://localhost:3002${tshirtWomen.cover}`}
-                                        alt={tshirtWomen.name}
-                                        className="card-img-top"
-                                        style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                                    />
-                                )}
-                                <div className="card-body">
-                                    <h5 className="card-title">{tshirtWomen.name}</h5>
-                                    <p className="card-text">${tshirtWomen.price}</p>
+                    {filtered.length === 0 ? (
+                        <p className="text-center">❌ Nuk u gjetën produkte që përputhen me kërkimin.</p>
+                    ) : (
+                        filtered.map(tshirtWomen => (
+                            <div key={tshirtWomen.id} className="col-md-4 mb-4">
+                                <div className="card shadow-sm p-3 text-center">
+                                    {tshirtWomen.cover && (
+                                        <img
+                                            src={`http://localhost:3002${tshirtWomen.cover}`}
+                                            alt={tshirtWomen.name}
+                                            className="card-img-top"
+                                            style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                                        />
+                                    )}
+                                    <div className="card-body">
+                                        <h5 className="card-title">{tshirtWomen.name}</h5>
+                                        <p className="card-text">${tshirtWomen.price}</p>
 
-                                    <div className="d-flex justify-content-center gap-2 mt-3">
-                                        <button
-                                            className="btn btn-outline-primary btn-sm"
-                                            onClick={() => handleAddToCart(tshirtWomen)}
-                                        >
-                                            🛒 Add to Cart
-                                        </button>
+                                        <div className="d-flex justify-content-center gap-2 mt-3">
+                                            <button
+                                                className="btn btn-outline-primary btn-sm"
+                                                onClick={() => handleAddToCart(tshirtWomen)}
+                                            >
+                                                🛒 Add to Cart
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </div>

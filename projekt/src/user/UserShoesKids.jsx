@@ -7,13 +7,14 @@ const UserShoesKids = () => {
     const [shoesKids, setShoesKids] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [sortOption, setSortOption] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // ✅ Shtojmë gjendjen për kërkim
 
     useEffect(() => {
         const fetchAllShoesKids = async () => {
             try {
                 const res = await axios.get("http://localhost:3002/shoeskids");
                 setShoesKids(res.data);
-                setFiltered(res.data); // Fillon me të gjitha të dhënat
+                setFiltered(res.data);
             } catch (err) {
                 console.log(err);
             }
@@ -22,22 +23,29 @@ const UserShoesKids = () => {
     }, []);
 
     useEffect(() => {
-        let sorted = [...filtered];
+        let filteredData = shoesKids;
+
+        if (searchTerm.trim() !== '') {
+            filteredData = filteredData.filter((shoe) =>
+                shoe.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
         switch (sortOption) {
             case 'price-low-to-high':
-                sorted.sort((a, b) => a.price - b.price); // Çmimi nga më i ulëti në më të lartin
+                filteredData.sort((a, b) => a.price - b.price);
                 break;
             case 'price-high-to-low':
-                sorted.sort((a, b) => b.price - a.price); // Çmimi nga më i larti në më të ulët
+                filteredData.sort((a, b) => b.price - a.price);
                 break;
             default:
                 break;
         }
-        setFiltered(sorted);
-    }, [sortOption]);
+
+        setFiltered(filteredData);
+    }, [searchTerm, sortOption, shoesKids]);
 
     const handleAddToCart = (shoeKids) => {
-        // Logika për të shtuar Shoe në karrocë
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         const newItem = {
@@ -55,16 +63,25 @@ const UserShoesKids = () => {
         alert(`✅ "${shoeKids.name}" u shtua në shportë!`);
     };
 
-    
-
     return (
         <div className="d-flex min-vh-100" style={{ backgroundColor: '#F0F0F0' }}>
-            <USidebar /> 
+            <USidebar />
 
             <div className="container mt-4">
                 <h1 className="mb-4 text-center">Shoes For Kids</h1>
-                
-                {/* Styled Dropdown for sorting */}
+
+                {/* 🔍 Kërkimi */}
+                <div className="mb-4 d-flex justify-content-center">
+                    <input
+                        type="text"
+                        className="form-control w-50 shadow-sm rounded-pill text-center"
+                        placeholder="🔍 Kërko këpucë për fëmijë..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
+                {/* Filtro sipas çmimit */}
                 <div className="mb-4 d-flex justify-content-center">
                     <select
                         className="form-select w-50 shadow rounded-pill text-center"
@@ -78,35 +95,37 @@ const UserShoesKids = () => {
                 </div>
 
                 <div className="row">
-                    {filtered.map(shoeKids => (
-                        <div key={shoeKids.id} className="col-md-4 mb-4">
-                            <div className="card shadow-sm p-3 text-center">
-                                {shoeKids.cover && (
-                                    <img
-                                        src={`http://localhost:3002${shoeKids.cover}`}
-                                        alt={shoeKids.name}
-                                        className="card-img-top"
-                                        style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                                    />
-                                )}
-                                <div className="card-body">
-                                    <h5 className="card-title">{shoeKids.name}</h5>
-                                    <p className="card-text">${shoeKids.price}</p>
+                    {filtered.length === 0 ? (
+                        <p className="text-center">❌ Nuk u gjetën këpucë që përputhen me kërkimin.</p>
+                    ) : (
+                        filtered.map(shoeKids => (
+                            <div key={shoeKids.id} className="col-md-4 mb-4">
+                                <div className="card shadow-sm p-3 text-center">
+                                    {shoeKids.cover && (
+                                        <img
+                                            src={`http://localhost:3002${shoeKids.cover}`}
+                                            alt={shoeKids.name}
+                                            className="card-img-top"
+                                            style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                                        />
+                                    )}
+                                    <div className="card-body">
+                                        <h5 className="card-title">{shoeKids.name}</h5>
+                                        <p className="card-text">${shoeKids.price}</p>
 
-                                    {/* Butonat për "Add to Cart" dhe "Order Now" */}
-                                    <div className="d-flex justify-content-center gap-2 mt-3">
-                                        <button
-                                            className="btn btn-outline-primary btn-sm"
-                                            onClick={() => handleAddToCart(shoeKids)}
-                                        >
-                                            🛒 Add to Cart
-                                        </button>
-                                        
+                                        <div className="d-flex justify-content-center gap-2 mt-3">
+                                            <button
+                                                className="btn btn-outline-primary btn-sm"
+                                                onClick={() => handleAddToCart(shoeKids)}
+                                            >
+                                                🛒 Add to Cart
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </div>

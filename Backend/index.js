@@ -3,6 +3,7 @@ const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config();
 
 const login = require("./login");
 const tshirtRoutes = require("./tshirt"); 
@@ -13,9 +14,13 @@ const bagRoutes = require("./bag");
 const produktetRoutes = require('./products');
 const orderRoutes = require("./order");
 
+
+
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+
 
 app.use(login);
 app.use("/", tshirtRoutes);  // <- Këtu ndryshimi, pa "/tshirt" sepse router përmban rrugët e plota

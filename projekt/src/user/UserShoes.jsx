@@ -7,6 +7,7 @@ const UserShoes = () => {
     const [shoes, setShoes] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [sortOption, setSortOption] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // ✅ Kërkimi
 
     useEffect(() => {
         const fetchAllShoes = async () => {
@@ -21,23 +22,31 @@ const UserShoes = () => {
         fetchAllShoes();
     }, []);
 
+    // Filter dhe sortim
     useEffect(() => {
-        let sorted = [...filtered];
+        let filteredData = shoes;
+
+        if (searchTerm.trim() !== '') {
+            filteredData = filteredData.filter((shoe) =>
+                shoe.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
         switch (sortOption) {
             case 'price-low-to-high':
-                sorted.sort((a, b) => a.price - b.price); // Çmimi nga më i ulëti në më të lartin
+                filteredData.sort((a, b) => a.price - b.price);
                 break;
             case 'price-high-to-low':
-                sorted.sort((a, b) => b.price - a.price); // Çmimi nga më i larti në më të ulët
+                filteredData.sort((a, b) => b.price - a.price);
                 break;
             default:
                 break;
         }
-        setFiltered(sorted);
-    }, [sortOption]);
+
+        setFiltered(filteredData);
+    }, [searchTerm, sortOption, shoes]);
 
     const handleAddToCart = (shoe) => {
-        // Logika për të shtuar Shoe në karrocë
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         const newItem = {
@@ -55,16 +64,25 @@ const UserShoes = () => {
         alert(`✅ "${shoe.name}" u shtua në shportë!`);
     };
 
-    
-
     return (
         <div className="d-flex min-vh-100" style={{ backgroundColor: '#F0F0F0' }}>
-            <USidebar /> 
+            <USidebar />
 
             <div className="container mt-4">
                 <h1 className="mb-4 text-center">Shoes For Men</h1>
-                
-                {/* Styled Dropdown for sorting */}
+
+                {/* 🔍 Input për search */}
+                <div className="mb-4 d-flex justify-content-center">
+                    <input
+                        type="text"
+                        className="form-control w-50 shadow-sm rounded-pill text-center"
+                        placeholder="🔍 Kërko këpucë..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
+                {/* Dropdown për sorting */}
                 <div className="mb-4 d-flex justify-content-center">
                     <select
                         className="form-select w-50 shadow rounded-pill text-center"
@@ -78,35 +96,37 @@ const UserShoes = () => {
                 </div>
 
                 <div className="row">
-                    {filtered.map(shoe => (
-                        <div key={shoe.id} className="col-md-4 mb-4">
-                            <div className="card shadow-sm p-3 text-center">
-                                {shoe.cover && (
-                                    <img
-                                        src={`http://localhost:3002${shoe.cover}`}
-                                        alt={shoe.name}
-                                        className="card-img-top"
-                                        style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                                    />
-                                )}
-                                <div className="card-body">
-                                    <h5 className="card-title">{shoe.name}</h5>
-                                    <p className="card-text">${shoe.price}</p>
+                    {filtered.length === 0 ? (
+                        <p className="text-center">❌ Nuk u gjetën rezultate.</p>
+                    ) : (
+                        filtered.map(shoe => (
+                            <div key={shoe.id} className="col-md-4 mb-4">
+                                <div className="card shadow-sm p-3 text-center">
+                                    {shoe.cover && (
+                                        <img
+                                            src={`http://localhost:3002${shoe.cover}`}
+                                            alt={shoe.name}
+                                            className="card-img-top"
+                                            style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                                        />
+                                    )}
+                                    <div className="card-body">
+                                        <h5 className="card-title">{shoe.name}</h5>
+                                        <p className="card-text">${shoe.price}</p>
 
-                                    {/* Butonat për "Add to Cart" dhe "Order Now" */}
-                                    <div className="d-flex justify-content-center gap-2 mt-3">
-                                        <button
-                                            className="btn btn-outline-primary btn-sm"
-                                            onClick={() => handleAddToCart(shoe)}
-                                        >
-                                            🛒 Add to Cart
-                                        </button>
-                                        
+                                        <div className="d-flex justify-content-center gap-2 mt-3">
+                                            <button
+                                                className="btn btn-outline-primary btn-sm"
+                                                onClick={() => handleAddToCart(shoe)}
+                                            >
+                                                🛒 Add to Cart
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </div>

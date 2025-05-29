@@ -93,19 +93,6 @@ import UserCart from './user/UserCart';
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 const App = () => {
   return (
   
@@ -217,6 +204,7 @@ const App = () => {
           <Route path='/addbag' element={<AddBag />}/>
           <Route path='/editbag/:id' element={<EditBag/>}/>
           <Route path='/admin-orders' element={<AdminOrders/>}/>
+       
         </Routes>
        
 
