@@ -13,7 +13,7 @@ const shoesRoutes = require("./shoes");
 const bagRoutes = require("./bag");
 const produktetRoutes = require('./products');
 const orderRoutes = require("./order");
-
+const contactusRouter = require('./contactus')
 
 
 app.use(express.json());
@@ -30,6 +30,7 @@ app.use("/", pantsRoutes);
 app.use("/bag", bagRoutes);
 app.use("/produktet", produktetRoutes);
 app.use("/api", orderRoutes);
+app.use("/api", contactusRouter);
 
 app.listen(3002, () => {
   console.log("Server is listening on port 3002");

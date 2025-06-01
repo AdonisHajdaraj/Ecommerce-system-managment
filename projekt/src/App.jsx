@@ -5,11 +5,15 @@ import './App.css';
 import Dashboard from './admin/Dashboard';
 import Sidebar from './admin/Sidebar'
 
+
+
 import Logout from './components/logout';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Products from './admin/Products';
 
+import Contactus from './user/Contactus';
+import AdminContactus from './admin/AdminContactus';
 
 import Users from './admin/Users';
 
@@ -46,6 +50,7 @@ import EditPantsWomen from './admin/EditPantsWomen';
 
 
 import Footwear from './user/Footwear';
+import AllShoes from './user/AllShoes';
 import Shoes from './admin/Shoes'
 import AddShoes from './admin/AddShoes';
 import EditShoes from './admin/EditShoes';
@@ -103,6 +108,8 @@ const App = () => {
           <Route path='/sidebar' element={<Sidebar />} />
   
           <Route path='/products' element={<Products/>}/>
+          <Route path='/admin-messages' element={<AdminContactus/>}/>
+
           {/*Tshirt Admin */}
           <Route path='/tshirt-men' element={<Tshirt />}/>
           <Route path='/addtshirt-men' element={<AddTshirt />}/>
@@ -161,7 +168,8 @@ const App = () => {
           
 
 
-          
+          <Route path='/user-contactus' element={<Contactus />}/>
+
           <Route path='/login' element={<Login />}/>
           <Route path='/signup' element={<Signup />}/>
           <Route path='/users' element={<Users />}/>
@@ -190,6 +198,7 @@ const App = () => {
           <Route path='/user-pants-women' element={<UserPantsWomen/>}/>
           <Route path='/user-pants-kids' element={<UserPantsKids/>}/>
           {/*Shoes */}
+          <Route path='/all-shoes' element={<AllShoes />}/>
           <Route path='/footwear' element={<Footwear />}/>
           <Route path='/user-shoes' element={<UserShoes />} />
           <Route path='/user-shoes-women' element={<UserShoesWomen />} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
-import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaTshirt, FaShoePrints, FaShoppingBag, FaShoppingCart } from 'react-icons/fa';
+import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaTshirt, FaShoePrints, FaShoppingBag, FaShoppingCart, FaEnvelope } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -236,6 +236,14 @@ const Sidebar = () => {
 
         <Nav.Link
           as={Link}
+          to="/admin-orders"
+          className="d-flex align-items-center text-dark py-2 justify-content-center"
+        >
+          <FaShoppingCart className="me-2" /> Orders
+        </Nav.Link>
+
+        <Nav.Link
+          as={Link}
           to="/users"
           className="d-flex align-items-center text-dark py-2 justify-content-center"
         >
@@ -244,10 +252,10 @@ const Sidebar = () => {
 
         <Nav.Link
           as={Link}
-          to="/admin-orders"
+          to="/admin-messages"
           className="d-flex align-items-center text-dark py-2 justify-content-center"
         >
-          <FaShoppingCart className="me-2" /> Orders
+          <FaEnvelope className="me-2" /> Messages
         </Nav.Link>
 
         <Nav.Link

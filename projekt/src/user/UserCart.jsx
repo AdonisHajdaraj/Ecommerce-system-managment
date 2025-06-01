@@ -2,71 +2,96 @@ import React, { useEffect, useState } from 'react';
 import USidebar from './UserSidebar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+
+// Stripe imports
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 const stripePromise = loadStripe('pk_test_51RTlF1FoxXfbMDdPzc2ete3fIgBP678DB62W8sIbG7Ro2IwQAk65AufMA7usXYfnO0m383UCq3jatLuM8p4qaUNq00h4kaAAmW');
 
-const CheckoutForm = ({ amount, onSuccess, cartItems }) => {
+const CheckoutForm = ({ cartItems, firstName, lastName, phone, address, clearCart }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [cardComplete, setCardComplete] = useState(false);
-  const [cardError, setCardError] = useState(null);
-
-  const handleCardChange = (event) => {
-    setCardComplete(event.complete);
-    setCardError(event.error ? event.error.message : null);
-    setErrorMessage(event.error ? event.error.message : null);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-    setErrorMessage(null);
 
-    if (!stripe || !elements) {
-      setErrorMessage("Stripe is not loaded yet. Please wait.");
-      setLoading(false);
-      return;
-    }
-
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement || !cardComplete) {
-      setErrorMessage("Please complete your card details.");
-      setLoading(false);
-      return;
-    }
+    if (!stripe || !elements) return;
 
     try {
-      const { data } = await axios.post('http://localhost:3002/api/create-payment-intent', { cartItems });
-      const clientSecret = data.clientSecret;
-
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: { card: cardElement },
+      const { data: clientSecret } = await axios.post('http://localhost:3002/api/create-payment-intent', {
+        amount: cartItems.reduce((acc, item) => acc + item.price * item.quantity * 100, 0),
       });
 
-      if (result.error) {
-        setErrorMessage(result.error.message);
-      } else if (result.paymentIntent.status === 'succeeded') {
-        onSuccess(result.paymentIntent.id);
+      const cardElement = elements.getElement(CardElement);
+
+      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: `${firstName} ${lastName}`,
+            phone: phone,
+            address: { line1: address },
+          },
+        },
+      });
+
+      if (paymentResult.error) {
+        alert(paymentResult.error.message);
+      } else {
+        if (paymentResult.paymentIntent.status === 'succeeded') {
+          for (const item of cartItems) {
+            const orderData = {
+              firstName,
+              lastName,
+              phone,
+              address,
+              productId: item.id,
+              productName: item.name,
+              price: item.price,
+              quantity: item.quantity,
+              size: item.size,
+              created_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            };
+            await axios.post("http://localhost:3002/api/order", orderData);
+          }
+          alert("Payment successful and order placed!");
+          clearCart();
+        }
       }
     } catch (error) {
-      setErrorMessage('Payment failed. Try again.');
-      console.error(error);
+      console.error("Payment error:", error);
+      alert("Payment failed, please try again.");
     }
-
-    setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <CardElement onChange={handleCardChange} options={{ hidePostalCode: true }} />
-      {cardError && <div className="text-danger mt-2">{cardError}</div>}
-      {errorMessage && !cardError && <div className="text-danger mt-2">{errorMessage}</div>}
-      <button className="btn btn-primary mt-3" type="submit" disabled={!stripe || loading}>
-        {loading ? 'Processing...' : `Pay $${amount.toFixed(2)}`}
+    <form onSubmit={handleSubmit} className="mt-4 p-4 border rounded shadow-sm bg-light">
+      <h5 className="mb-3 text-secondary">Payment Information</h5>
+      <div className="form-group mb-3">
+        <CardElement
+          options={{
+            style: {
+              base: {
+                fontSize: '16px',
+                color: '#495057',
+                '::placeholder': {
+                  color: '#adb5bd',
+                },
+                fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+                padding: '12px',
+              },
+              invalid: {
+                color: '#fa5252',
+              },
+            },
+            hidePostalCode: true,
+          }}
+          className="form-control p-3"
+        />
+      </div>
+      <button className="btn btn-success w-100" type="submit" disabled={!stripe}>
+        Pay Now
       </button>
     </form>
   );
@@ -78,203 +103,290 @@ const UserCart = () => {
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
-  const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
     setCartItems(storedCart);
   }, []);
 
-  const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  const handlePlaceOrderValidation = () => {
-    if (!firstName.trim() || !lastName.trim() || !phone.trim() || !address.trim()) {
-      alert('Please fill in all user details.');
-      return false;
-    }
-    if (cartItems.length === 0) {
-      alert('Your cart is empty.');
-      return false;
-    }
-    return true;
+  const clearCart = () => {
+    localStorage.removeItem('cart');
+    setCartItems([]);
+    setFirstName('');
+    setLastName('');
+    setPhone('');
+    setAddress('');
   };
 
-  const handlePaymentSuccess = async (paymentIntentId) => {
-    if (!handlePlaceOrderValidation()) return;
-
-    try {
-      for (const item of cartItems) {
-        const orderData = {
-          firstName,
-          lastName,
-          phone,
-          address,
-          productId: item.id,
-          productName: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          size: item.size || 'M',
-          paymentIntentId,
-        };
-        await axios.post('http://localhost:3002/api/order', orderData);
-      }
-
-      setOrderDetails({
-        firstName,
-        lastName,
-        phone,
-        address,
-        cartItems,
-        totalAmount,
-        paymentIntentId,
-      });
-
-      localStorage.removeItem('cart');
-      setCartItems([]);
-      setFirstName('');
-      setLastName('');
-      setPhone('');
-      setAddress('');
-      setOrderPlaced(true);
-    } catch (error) {
-      console.error('Failed to save order:', error);
-      alert('Failed to save order after payment.');
-    }
+  const handleQuantityChange = (index, value) => {
+    const quantity = Math.max(1, Number(value));
+    const updatedItems = [...cartItems];
+    updatedItems[index].quantity = quantity;
+    setCartItems(updatedItems);
+    localStorage.setItem('cart', JSON.stringify(updatedItems));
   };
 
-  // Funksioni për fshirjen e item-it nga shporta dhe backend
-  const handleDeleteItem = (itemId) => {
-  // Përditëso vetëm frontend state dhe localStorage
-  const updatedCart = cartItems.filter(item => item.id !== itemId);
-  setCartItems(updatedCart);
-  localStorage.setItem('cart', JSON.stringify(updatedCart));
-};
+  const handleSizeChange = (index, value) => {
+    const updatedItems = [...cartItems];
+    updatedItems[index].size = value;
+    setCartItems(updatedItems);
+    localStorage.setItem('cart', JSON.stringify(updatedItems));
+  };
 
+  const handleDelete = (index) => {
+    const updatedItems = [...cartItems];
+    updatedItems.splice(index, 1);
+    setCartItems(updatedItems);
+    localStorage.setItem('cart', JSON.stringify(updatedItems));
+  };
 
-  if (orderPlaced && orderDetails) {
-    return (
-      <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0f0f0' }}>
-        <USidebar />
-        <div className="container mt-4">
-          <h2>Thank you for your order!</h2>
-          <p>Your payment was successful and your order is being processed.</p>
-
-          <h4 className="mt-4">Order Summary</h4>
-          <table className="table table-bordered shadow bg-white">
-            <thead className="table-primary">
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orderDetails.cartItems.map((item, index) => (
-                <tr key={index}>
-                  <td><img src={item.image} alt={item.name} width="70" /></td>
-                  <td>{item.name}</td>
-                  <td>{item.size || 'M'}</td>
-                  <td>{item.quantity}</td>
-                  <td>${item.price.toFixed(2)}</td>
-                  <td>${(item.price * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
-              <tr>
-                <td colSpan="5" className="text-end fw-bold">Total</td>
-                <td className="fw-bold">${orderDetails.totalAmount.toFixed(2)}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div className="mt-3">
-            <h5>Customer Info</h5>
-            <p><strong>Name:</strong> {orderDetails.firstName} {orderDetails.lastName}</p>
-            <p><strong>Phone:</strong> {orderDetails.phone}</p>
-            <p><strong>Address:</strong> {orderDetails.address}</p>
-            <p><strong>Payment ID:</strong> {orderDetails.paymentIntentId}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const cartTotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
   return (
-    <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0f0f0' }}>
+    <div className="d-flex min-vh-100" style={{ backgroundColor: '#f8f9fa' }}>
       <USidebar />
-      <div className="container mt-4">
-        <h2 className="text-center mb-4">🛒 Your Cart</h2>
+      <div className="container my-5">
+        <h2 className="text-center mb-4 text-primary fw-bold">🛒 Your Cart</h2>
+
         {cartItems.length === 0 ? (
-          <p className="text-center">Your cart is empty.</p>
+          <p className="text-center fs-5 text-muted">Your cart is empty.</p>
         ) : (
-          <>
-            <table className="table table-bordered shadow bg-white">
-              <thead className="table-primary">
+          <div className="table-responsive shadow rounded bg-white">
+            <table className="table table-hover align-middle mb-0">
+              <thead className="table-primary text-center">
                 <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Size</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Total</th>
-                  <th>Action</th> {/* Kolona për Delete */}
+                  <th scope="col">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Size</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {cartItems.map((item, index) => (
-                  <tr key={index}>
-                    <td><img src={item.image} alt={item.name} width="70" /></td>
-                    <td>{item.name}</td>
-                    <td>{item.size || 'M'}</td>
-                    <td>{item.quantity}</td>
-                    <td>${item.price.toFixed(2)}</td>
-                    <td>${(item.price * item.quantity).toFixed(2)}</td>
+                  <tr key={index} className="align-middle">
+                    <td>
+                      <img
+                        src={`http://localhost:3002${item.image}`}
+                        alt={item.name}
+                        className="rounded"
+                        style={{ width: '80px', height: '80px', objectFit: 'cover', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
+                      />
+                    </td>
+                    <td className="fw-semibold">{item.name}</td>
+                    <td>
+                      {item.type === 'shoe' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        {[...Array(6)].map((_, i) => {
+                                            const size = 40 + i;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+                                        </select>
+                                    ) : item.type === 'tshirt' ||  item.type === 'hoodie'  ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        </select>
+                                    ) : item.type === 'tshirtwomen' ||  item.type === 'hoodiewomen' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        <option value="S">XS</option>
+                                        <option value="M">S</option>
+                                        <option value="L">M</option>
+                                        <option value="XL">L</option>
+                                        </select>                                    
+                                    ) : item.type === 'tshirtkids' || item.type === 'hoodiekids' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e) => handleSizeChange(index, e.target.value)}
+                                        className="form-select"
+                                        >
+                                        <option value="XXS">XXS</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        </select>
+                                    ) : item.type === 'shoewomen' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(5)].map((_, i) => {
+                                            const size = 36 + i;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ):  item.type === 'shoekids' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(6)].map((_, i) => {
+                                            const size = 30 + i;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) : item.type === 'pants' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(13)].map((_, i) => {
+                                            const size = 40 + i * 2;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) : item.type === 'pantswomen' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(7)].map((_, i) => {
+                                            const size = 34 + i * 2;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) : item.type === 'pantskids' ? (
+                                        <select
+                                        value={item.size}
+                                        onChange={(e)=>handleSizeChange(index, e.target.value)}
+                                        className='form-select'
+                                        >
+                                        {[...Array(6)].map((_, i) => {
+                                            const size = 28 + i * 2;
+                                            return <option key={size} value={size}>{size}</option>;
+                                        })}
+
+                                        </select>
+                                    ) : (
+                      <span className="fw-normal">N/A</span>
+                    )}
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) => handleQuantityChange(index, e.target.value)}
+                        className="form-control text-center"
+                        style={{ maxWidth: '80px' }}
+                      />
+                    </td>
+                    <td>{item.price.toFixed(2)} €</td>
+                    <td>{(item.price * item.quantity).toFixed(2)} €</td>
                     <td>
                       <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDeleteItem(item.id)}
+                        onClick={() => handleDelete(index)}
+                        className="btn btn-outline-danger btn-sm"
+                        title="Remove item"
                       >
-                        Delete
+                        &times;
                       </button>
                     </td>
                   </tr>
                 ))}
-                <tr>
-                  <td colSpan="5" className="text-end fw-bold">Total</td>
-                  <td className="fw-bold">${totalAmount.toFixed(2)}</td>
-                  <td></td>
-                </tr>
               </tbody>
             </table>
 
-            <div className="mb-3">
-              <label className="form-label">First Name</label>
-              <input type="text" className="form-control" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+            <div className="d-flex justify-content-end mt-4 fw-bold fs-5 text-secondary">
+              Total: {cartTotal} €
             </div>
-            <div className="mb-3">
-              <label className="form-label">Last Name</label>
-              <input type="text" className="form-control" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Phone Number</label>
-              <input type="tel" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Address</label>
-              <textarea className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} required />
+
+            <hr />
+
+            <div className="row g-3 mt-4">
+              <div className="col-md-6">
+                <label htmlFor="firstName" className="form-label">
+                  First Name *
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  className="form-control"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="lastName" className="form-label">
+                  Last Name *
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  className="form-control"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="phone" className="form-label">
+                  Phone *
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  className="form-control"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  pattern="[0-9+\-\s]{7,15}"
+                  title="Enter a valid phone number"
+                />
+              </div>
+
+              <div className="col-md-6">
+                <label htmlFor="address" className="form-label">
+                  Address *
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  className="form-control"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
             <Elements stripe={stripePromise}>
               <CheckoutForm
-                amount={totalAmount}
-                onSuccess={handlePaymentSuccess}
                 cartItems={cartItems}
+                firstName={firstName}
+                lastName={lastName}
+                phone={phone}
+                address={address}
+                clearCart={clearCart}
               />
             </Elements>
-          </>
+          </div>
         )}
       </div>
     </div>

@@ -7,7 +7,8 @@ import {
   FaShoePrints,
   FaShoppingBag,
   FaShoppingCart,
-  FaSignOutAlt
+  FaSignOutAlt,
+  FaEnvelope
 } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -193,9 +194,9 @@ const USidebar = () => {
               }}
             >
               {/* Shoes */}
-              <div
+              <Nav.Link
                 as={Link}
-                to="/user-shoes"
+                to="/all-shoes"
                 style={{
                   color: 'black',
                   fontSize: '1rem',
@@ -206,7 +207,7 @@ const USidebar = () => {
                 }}
               >
                 Shoes
-              </div>
+              </Nav.Link>
               <Nav className="flex-column">
                 <Nav.Link as={Link} to="/user-shoes" style={{ color: 'black', fontSize: '1rem' }}>
                   Shoes for Men
@@ -228,6 +229,9 @@ const USidebar = () => {
         </Nav.Link>
         <Nav.Link as={Link} to="/user-cart" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
           <FaShoppingCart className="me-2" /> Cart
+        </Nav.Link>
+        <Nav.Link as={Link} to="/user-contactus" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
+          <FaEnvelope className="me-2" /> Contact Us
         </Nav.Link>
         <Nav.Link as={Link} to="/logout" className="d-flex align-items-center py-2" style={{ color: '#ff4d4d' }}>
           <FaSignOutAlt className="me-2" /> Logout
