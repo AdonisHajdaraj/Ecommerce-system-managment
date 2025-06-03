@@ -15,35 +15,67 @@ router.post('/v1/register', async (req, res) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const sql = "INSERT INTO login (name, email, password, role) VALUES (?, ?, ?, ?)";
-
-        db.query(sql, [name, email, hashedPassword, role], (err, result) => {
+        const checkEmailSql = "SELECT * FROM login WHERE email = ?";
+        db.query(checkEmailSql, [email], async (err, results) => {
             if (err) {
-                console.error('Gabim në databazë:', err);
-                return res.status(500).json({ message: "Gabim gjatë regjistrimit." });
+                console.error('Gabim në databazë gjatë kontrollit të email:', err);
+                return res.status(500).json({ message: "Gabim në server gjatë regjistrimit." });
             }
 
-            const userId = result.insertId;
-            const payload = { id: userId, name, email, role };
-            const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+            if (results.length > 0) {
+                return res.status(400).json({ message: "Ky email është marrë tashmë. Përdor një tjetër." });
+            }
 
-            return res.status(201).json({
-                message: "Regjistrimi u krye me sukses",
-                token,
-                userId,
-                userName: name,
-                userEmail: email,
-                role
-            });
+            try {
+                const hashedPassword = await bcrypt.hash(password, 10);
+                const insertSql = "INSERT INTO login (name, email, password, role) VALUES (?, ?, ?, ?)";
+
+                db.query(insertSql, [name, email, hashedPassword, role], (insertErr, result) => {
+                    if (insertErr) {
+                        console.error('Gabim në databazë gjatë regjistrimit:', insertErr);
+                        return res.status(500).json({ message: "Gabim gjatë regjistrimit." });
+                    }
+
+                    const userId = result.insertId;
+                    const payload = { id: userId, name, email, role };
+
+                    // Gjenero access token me 1h jetë
+                    const token = jwt.sign(payload, secretKey, { expiresIn: '15s' });
+
+                    // Gjenero refresh token me 7 ditë jetë
+                    const refreshToken = jwt.sign(payload, secretKey, { expiresIn: '7d' });
+
+                    // Ruaj refresh token në DB
+                    const updateRefreshTokenSql = "UPDATE login SET refresh_token = ? WHERE id = ?";
+                    db.query(updateRefreshTokenSql, [refreshToken, userId], (updateErr) => {
+                        if (updateErr) {
+                            console.error('Gabim gjatë ruajtjes së refresh token:', updateErr);
+                            return res.status(500).json({ message: "Gabim në server." });
+                        }
+
+                        return res.status(201).json({
+                            message: "Regjistrimi u krye me sukses",
+                            token,
+                            refreshToken,
+                            userId,
+                            userName: name,
+                            userEmail: email,
+                            role
+                        });
+                    });
+                });
+            } catch (hashError) {
+                console.error("Gabim me bcrypt:", hashError);
+                return res.status(500).json({ message: "Gabim gjatë enkriptimit të fjalëkalimit." });
+            }
         });
     } catch (error) {
-        console.error("Gabim me bcrypt:", error);
-        return res.status(500).json({ message: "Gabim gjatë enkriptimit të fjalëkalimit." });
+        console.error("Gabim i papritur:", error);
+        return res.status(500).json({ message: "Gabim i papritur në server." });
     }
 });
 
-// 🔹 LOGIN (SIGN IN)
+// 🔹 LOGIN
 router.post('/v1/signin', (req, res) => {
     const { email, password } = req.body;
 
@@ -63,25 +95,87 @@ router.post('/v1/signin', (req, res) => {
         }
 
         const user = data[0];
-
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Email ose fjalëkalim i pasaktë." });
         }
 
         const payload = { id: user.id, name: user.name, email: user.email, role: user.role };
-        const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
 
-        return res.json({
-            token,
-            userId: user.id,
-            userName: user.name,
-            userEmail: user.email,
-            role: user.role,
-            message: "Kyçja u krye me sukses!"
+        // Gjenero access token me 1h jetë
+        const token = jwt.sign(payload, secretKey, { expiresIn: '15s' })
+
+        // Gjenero refresh token me 7 ditë jetë
+        const refreshToken = jwt.sign(payload, secretKey, { expiresIn: '7d' });
+
+        // Ruaj refresh token në DB
+        const updateSql = "UPDATE login SET refresh_token = ? WHERE id = ?";
+        db.query(updateSql, [refreshToken, user.id], (updateErr) => {
+            if (updateErr) {
+                console.error('Gabim gjatë ruajtjes së refresh token:', updateErr);
+                return res.status(500).json({ message: "Gabim në server." });
+            }
+
+            return res.json({
+                token,
+                refreshToken,
+                userId: user.id,
+                userName: user.name,
+                userEmail: user.email,
+                role: user.role,
+                message: "Kyçja u krye me sukses!"
+            });
         });
     });
 });
+
+// 🔹 REFRESH TOKEN
+router.post('/token/refresh', (req, res) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) return res.status(401).json({ message: "Refresh token mungon." });
+
+    const sql = "SELECT * FROM login WHERE refresh_token = ?";
+    db.query(sql, [refreshToken], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Gabim në server." });
+        }
+        if (results.length === 0) {
+            return res.status(403).json({ message: "Refresh token i pavlefshëm." });
+        }
+
+        jwt.verify(refreshToken, secretKey, (verifyErr, user) => {
+            if (verifyErr) {
+                return res.status(403).json({ message: "Refresh token i pavlefshëm." });
+            }
+
+            const payload = { id: user.id, name: user.name, email: user.email, role: user.role };
+
+            // Gjenero access token të ri me 1h jetë
+            const newAccessToken = jwt.sign(payload, secretKey, { expiresIn: '15s' });
+
+            res.json({ token: newAccessToken, role: user.role }); // dërgo tokenin dhe rolin në front
+        });
+    });
+});
+
+
+
+// BACKEND (Node.js/Express)
+router.post('/logout', (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) return res.status(400).json({ message: "Refresh token mungon." });
+
+  const sql = "UPDATE login SET refresh_token = NULL WHERE refresh_token = ?";
+  db.query(sql, [refreshToken], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Gabim në server." });
+    }
+    return res.status(200).json({ message: "Logout u krye me sukses." });
+  });
+});
+
 
 // 🔹 MERR TË GJITHË PËRDORUESIT
 router.get("/v2/login", (req, res) => {
@@ -113,7 +207,7 @@ router.post('/v1/login', async (req, res) => {
 
             const userId = result.insertId;
             const payload = { id: userId, name, email, role };
-            const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+            const token = jwt.sign(payload, secretKey, { expiresIn: '15s' });
 
             res.status(201).json({
                 message: 'User added successfully',
@@ -128,14 +222,6 @@ router.post('/v1/login', async (req, res) => {
         console.error("Bcrypt Error:", error);
         return res.status(500).json({ message: "Password hashing failed" });
     }
-});
-
-// 🔹 LOGOUT
-router.post('/v1/logout', (req, res) => {
-    // Clear the JWT token stored in the cookies
-    res.clearCookie('token', { httpOnly: true, secure: true });  // Adjust secure flag based on your environment (use true for HTTPS)
-  
-    res.status(200).json({ message: 'Successfully logged out' });
 });
 
 // 🔹 FSHI NJË PËRDORUES

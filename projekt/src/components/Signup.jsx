@@ -39,17 +39,13 @@ const Signup = () => {
         const { token, userId, userName, userEmail, role } = res.data;
 
         if (token) {
-          // Ruaj të dhënat në localStorage
           localStorage.setItem('token', token);
           localStorage.setItem('userId', userId);
           localStorage.setItem('userName', userName);
           localStorage.setItem('userEmail', userEmail);
           localStorage.setItem('userRole', role);
 
-         
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-          // Ridrejto në dashboard
           navigate(role === 'admin' ? '/dashboard' : '/user-dashboard');
         }
       } catch (err) {
@@ -74,7 +70,7 @@ const Signup = () => {
                   <div className="form-floating mb-3" key={field}>
                     <input
                       type={field === 'password' ? 'password' : 'text'}
-                      className="form-control"
+                      className={`form-control ${errors[field] ? 'is-invalid' : ''}`}
                       id={field}
                       name={field}
                       placeholder={field === 'name' ? 'Emri' : field === 'email' ? 'Email' : 'Fjalëkalimi'}
@@ -82,7 +78,7 @@ const Signup = () => {
                       onChange={handleInputChange}
                     />
                     <label htmlFor={field}>{field === 'name' ? 'Emri' : field === 'email' ? 'Email' : 'Fjalëkalimi'}</label>
-                    {errors[field] && <div className="text-danger">{errors[field]}</div>}
+                    {errors[field] && <div className="invalid-feedback">{errors[field]}</div>}
                   </div>
                 ))}
                 <div className="d-grid gap-2 mb-3">

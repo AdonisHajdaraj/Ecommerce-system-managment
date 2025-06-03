@@ -24,4 +24,20 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/products/count', (req, res) => {
+    const type = req.query.type;
+    if (!type) {
+        return res.status(400).json({ error: 'Type duhet të specifikohet' });
+    }
+
+    const sql = 'SELECT COUNT(*) AS count FROM products WHERE lloji = ?';
+    db.query(sql, [type], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Gabim në server' });
+        }
+        res.json({ count: results[0].count });
+    });
+});
+
 module.exports = router;

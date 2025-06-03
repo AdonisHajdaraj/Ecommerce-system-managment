@@ -29,14 +29,15 @@ const Login = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const res = await axios.post('http://localhost:3002/v1/signin', values);
-        const { token, userId, userName, userEmail, role } = res.data;
+        const { token, refreshToken, userId, userName, userEmail, role } = res.data;
 
-        if (token) {
+        if (token && refreshToken) {
           localStorage.setItem('userName', userName);
           localStorage.setItem('userEmail', userEmail);
           localStorage.setItem('userId', userId);
           localStorage.setItem('userRole', role);
           localStorage.setItem('token', token);
+          localStorage.setItem('refreshToken', refreshToken);
 
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           navigate(role === 'admin' ? '/dashboard' : '/user-dashboard');
