@@ -8,7 +8,8 @@ import {
   FaShoppingBag,
   FaShoppingCart,
   FaSignOutAlt,
-  FaEnvelope
+  FaEnvelope,
+  FaHatCowboy
 } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -227,6 +228,10 @@ const USidebar = () => {
         <Nav.Link as={Link} to="/user-bag" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
           <FaShoppingBag className="me-2" /> Bag
         </Nav.Link>
+        <Nav.Link as={Link} to="/user-cart" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
+   <FaShoppingCart className="me-2" /> Hat
+</Nav.Link>
+
         <Nav.Link as={Link} to="/user-cart" className="d-flex align-items-center py-2" style={{ color: 'black' }}>
           <FaShoppingCart className="me-2" /> Cart
         </Nav.Link>

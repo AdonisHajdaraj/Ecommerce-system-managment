@@ -39,6 +39,12 @@ import EditHoodieWomen from './admin/EditHoodieWomen';
 import HoodieKids from './admin/HoodieKids';
 import AddHoodieKids from './admin/AddHoodieKids';
 import EditHoodieKids from './admin/EditHoodieKids';
+import Hat from './admin/Hat';
+import AddHat from './admin/AddHat';
+import EditHat from './admin/EditHat';
+
+
+
 
 import AllPants from './user/AllPants';
 import Pants from './admin/Pants';
@@ -93,6 +99,7 @@ import UserShoesWomen from './user/UserShoesWomen';
 import UserShoesKids from './user/UserShoesKids';
 
 import UserBag from './user/UserBag';
+import UserHat from './user/UserHat';
 import UProducts from './user/UserProducts';  
 import UserCart from './user/UserCart';
 import PrivateRoute from './components/PrivateRoute';
@@ -167,6 +174,12 @@ const App = () => {
       <Route path="/addbag" element={<PrivateRoute><AddBag /></PrivateRoute>} />
       <Route path="/editbag/:id" element={<PrivateRoute><EditBag /></PrivateRoute>} />
 
+{/* Hats */}
+<Route path="/hat" element={<PrivateRoute><Hat /></PrivateRoute>} />
+<Route path="/addhat" element={<PrivateRoute><AddHat /></PrivateRoute>} />
+<Route path="/edithat/:id" element={<PrivateRoute><EditHat /></PrivateRoute>} />
+
+
       {/* User routes */}
       <Route path="/user-dashboard" element={<PrivateRoute><UDashboard /></PrivateRoute>} />
       <Route path="/user-sidebar" element={<PrivateRoute><USidebar /></PrivateRoute>} />
@@ -189,6 +202,8 @@ const App = () => {
       <Route path="/user-shoes-women" element={<UserShoesWomen />} />
       <Route path="/user-shoes-kids" element={<UserShoesKids />} />
       <Route path="/user-bag" element={<UserBag />} />
+      <Route path="/user-hat" element={<UserHat />} />
+
       <Route path="/user-products" element={<UProducts />} />
       <Route path="/user-cart" element={<UserCart />} />
 

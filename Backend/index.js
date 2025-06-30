@@ -11,6 +11,7 @@ const hoodieRoutes = require("./hoodie")
 const pantsRoutes = require("./pants")
 const shoesRoutes = require("./shoes");
 const bagRoutes = require("./bag");
+const hatRoutes = require("./hat")
 const produktetRoutes = require('./products');
 const orderRoutes = require("./order");
 const contactusRouter = require('./contactus')
@@ -35,6 +36,7 @@ app.use("/", shoesRoutes);
 app.use("/", hoodieRoutes);
 app.use("/", pantsRoutes);
 app.use("/bag", bagRoutes);
+app.use("/hat", hatRoutes);
 app.use("/produktet", produktetRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", contactusRouter);
