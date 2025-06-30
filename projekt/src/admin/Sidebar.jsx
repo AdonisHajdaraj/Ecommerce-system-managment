@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
-import { FaTachometerAlt, FaUsers, FaSignOutAlt, FaTshirt, FaShoePrints, FaShoppingBag, FaShoppingCart, FaEnvelope,FaHatCowboy } from 'react-icons/fa';
+import {
+  FaTachometerAlt, FaUsers, FaSignOutAlt, FaTshirt, FaShoePrints,
+  FaShoppingBag, FaShoppingCart, FaEnvelope, FaHatCowboy
+} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,270 +13,87 @@ const Sidebar = () => {
 
   return (
     <div
-      className="d-flex flex-column flex-shrink-0 p-3 shadow-sm"
+      className="d-flex flex-column flex-shrink-0 p-3 shadow"
       style={{
         width: '250px',
         height: '100vh',
         position: 'fixed',
-        backgroundColor: '#C0C0C0',
+        background: 'linear-gradient(to bottom, #fdfbfb, #ebedee)',
+        borderRight: '1px solid #ccc',
         zIndex: 1000,
       }}
     >
-      <a href="/" className="d-flex align-items-center mb-3 mb-md-0 text-dark text-decoration-none">
-        <span className="fs-4 fw-bold">Ecommerce</span>
-      </a>
-      <hr />
-      <Nav className="flex-column position-relative">
-        <Nav.Link
-          as={Link}
-          to="/dashboard"
-          className="d-flex align-items-center text-dark py-2 justify-content-center"
-        >
-          <FaTachometerAlt className="me-2" /> Dashboard
-        </Nav.Link>
+      <div className="mb-4 text-center">
+        <h4 className="fw-bold" style={{ color: '#4A90E2' }}>BoHoChic</h4>
+      </div>
+      <Nav className="flex-column">
 
-        {/* Clothing dropdown */}
-        <div
+        <NavItem to="/dashboard" icon={<FaTachometerAlt />} label="Dashboard" />
+
+        {/* CLOTHING DROPDOWN */}
+        <DropdownItem
+          icon={<FaTshirt />}
+          label="Clothing"
+          show={showVeshjeDropdown}
           onMouseEnter={() => setShowVeshjeDropdown(true)}
           onMouseLeave={() => setShowVeshjeDropdown(false)}
-          style={{ position: 'relative', cursor: 'pointer' }}
-        >
-          <div
-            className="d-flex align-items-center text-dark py-2 justify-content-center"
-            style={{ fontWeight: 'bold' }}
-          >
-            <FaTshirt className="me-2" />
-            <span>Clothing</span>
-          </div>
+          items={[
+            {
+              title: 'T-Shirts',
+              links: [
+                { to: '/tshirt-men', label: 'T-Shirts for Men' },
+                { to: '/tshirt-women', label: 'T-Shirts for Women' },
+                { to: '/tshirt-kids', label: 'T-Shirts for Kids' }
+              ]
+            },
+            {
+              title: 'Hoodies',
+              links: [
+                { to: '/hoodie-men', label: 'Hoodies for Men' },
+                { to: '/hoodie-women', label: 'Hoodies for Women' },
+                { to: '/hoodie-kids', label: 'Hoodies for Kids' }
+              ]
+            },
+            {
+              title: 'Pants',
+              links: [
+                { to: '/pants-men', label: 'Pants for Men' },
+                { to: '/pants-women', label: 'Pants for Women' },
+                { to: '/pants-kids', label: 'Pants for Kids' }
+              ]
+            }
+          ]}
+        />
 
-          {showVeshjeDropdown && (
-            <div
-              className="bg-white shadow-sm rounded"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: '100%', // hapet anash sidebar-it, pra në të djathtë
-                minWidth: '200px',
-                border: '1px solid #ccc',
-                padding: '10px',
-                display: 'flex',
-                justifyContent: 'space-around',
-                gap: '20px',
-                zIndex: 1100,
-              }}
-            >
-              {/* T-Shirts */}
-              <div style={{ minWidth: '100px' }}>
-                <div
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    marginBottom: '8px',
-                    textAlign: 'center',
-                    borderBottom: '1px solid #ccc',
-                    paddingBottom: '3px',
-                  }}
-                >
-                  T-Shirts
-                </div>
-                <Nav className="flex-column">
-                  <Nav.Link as={Link} to="/tshirt-men" style={{ color: 'black', fontSize: '1rem' }}>
-                    T-Shirts for Men
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/tshirt-women" style={{ color: 'black', fontSize: '1rem' }}>
-                    T-Shirts for Women
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/tshirt-kids" style={{ color: 'black', fontSize: '1rem' }}>
-                    T-Shirts for Kids
-                  </Nav.Link>
-                </Nav>
-              </div>
-
-              {/* Hoodies */}
-              <div style={{ minWidth: '100px' }}>
-                <div
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    marginBottom: '8px',
-                    textAlign: 'center',
-                    borderBottom: '1px solid #ccc',
-                    paddingBottom: '3px',
-                  }}
-                >
-                  Hoodies
-                </div>
-                <Nav className="flex-column">
-                  <Nav.Link
-                    as={Link}
-                    to="/hoodie-men"
-                    style={{ color: 'black', fontSize: '1rem' }}
-                  >
-                    Hoodies for Men
-                  </Nav.Link>
-                  <Nav.Link
-                    as={Link}
-                    to="/hoodie-women"
-                    style={{ color: 'black', fontSize: '1rem' }}
-                  >
-                    Hoodies for Women
-                  </Nav.Link>
-                  <Nav.Link
-                    as={Link}
-                    to="/hoodie-kids"
-                    style={{ color: 'black', fontSize: '1rem' }}
-                  >
-                    Hoodies for Kids
-                  </Nav.Link>
-                </Nav>
-              </div>
-
-              {/* Pants */}
-              <div style={{ minWidth: '100px' }}>
-                <div
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    marginBottom: '8px',
-                    textAlign: 'center',
-                    borderBottom: '1px solid #ccc',
-                    paddingBottom: '3px',
-                  }}
-                >
-                  Pants
-                </div>
-                <Nav className="flex-column">
-                  <Nav.Link
-                    as={Link}
-                    to="/pants-men"
-                    style={{ color: 'black', fontSize: '1rem' }}
-                  >
-                    Pants for Men
-                  </Nav.Link>
-                  <Nav.Link
-                    as={Link}
-                    to="/pants-women"
-                    style={{ color: 'black', fontSize: '1rem' }}
-                  >
-                    Pants for Women
-                  </Nav.Link>
-                  <Nav.Link
-                    as={Link}
-                    to="/pants-kids"
-                    style={{ color: 'black', fontSize: '1rem' }}
-                  >
-                    Pants for Kids
-                  </Nav.Link>
-                </Nav>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Shoes dropdown */}
-        <div
+        {/* SHOES DROPDOWN */}
+        <DropdownItem
+          icon={<FaShoePrints />}
+          label="Trainers"
+          show={showShoesDropdown}
           onMouseEnter={() => setShowShoesDropdown(true)}
           onMouseLeave={() => setShowShoesDropdown(false)}
-          style={{ position: 'relative', cursor: 'pointer' }}
-        >
-          <div
-            className="d-flex align-items-center text-dark py-2 justify-content-center"
-            style={{ fontWeight: 'bold' }}
-          >
-            <FaShoePrints className="me-2" />
-            <span>Trainers</span>
-          </div>
+          items={[
+            {
+              title: 'Shoes',
+              links: [
+                { to: '/shoes-men', label: 'Shoes for Men' },
+                { to: '/shoes-women', label: 'Shoes for Women' },
+                { to: '/shoes-kids', label: 'Shoes for Kids' }
+              ]
+            }
+          ]}
+        />
 
-          {showShoesDropdown && (
-            <div
-              className="bg-white shadow-sm rounded"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: '100%',
-                minWidth: '200px',
-                border: '1px solid #ccc',
-                padding: '10px',
-                zIndex: 1100,
-              }}
-            >
-              <div style={{ minWidth: '100px' }}>
-                <div
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    marginBottom: '8px',
-                    textAlign: 'center',
-                    borderBottom: '1px solid #ccc',
-                    paddingBottom: '3px',
-                  }}
-                >
-                  Shoes
-                </div>
-                <Nav className="flex-column">
-                  <Nav.Link as={Link} to="/shoes-men" style={{ color: 'black', fontSize: '1rem' }}>
-                    Shoes for Men
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/shoes-women" style={{ color: 'black', fontSize: '1rem' }}>
-                    Shoes for Women
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/shoes-kids" style={{ color: 'black', fontSize: '1rem' }}>
-                    Shoes for Kids
-                  </Nav.Link>
-                </Nav>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <Nav.Link
-          as={Link}
-          to="/bag"
-          className="d-flex align-items-center text-dark py-2 justify-content-center"
-        >
-          <FaShoppingBag className="me-2" /> Bag
-        </Nav.Link>
-<Nav.Link
-          as={Link}
-          to="/hat"
-          className="d-flex align-items-center text-dark py-2 justify-content-center"
-        >
-          <FaHatCowboy className="me-2" /> Hat
-        </Nav.Link>
-
-
-
-
-
-
-        <Nav.Link
-          as={Link}
-          to="/admin-orders"
-          className="d-flex align-items-center text-dark py-2 justify-content-center"
-        >
-          <FaShoppingCart className="me-2" /> Orders
-        </Nav.Link>
-
-        <Nav.Link
-          as={Link}
-          to="/users"
-          className="d-flex align-items-center text-dark py-2 justify-content-center"
-        >
-          <FaUsers className="me-2" /> Users
-        </Nav.Link>
-
-        <Nav.Link
-          as={Link}
-          to="/admin-messages"
-          className="d-flex align-items-center text-dark py-2 justify-content-center"
-        >
-          <FaEnvelope className="me-2" /> Messages
-        </Nav.Link>
+        <NavItem to="/bag" icon={<FaShoppingBag />} label="Bag" />
+        <NavItem to="/hat" icon={<FaHatCowboy />} label="Hat" />
+        <NavItem to="/admin-orders" icon={<FaShoppingCart />} label="Orders" />
+        <NavItem to="/users" icon={<FaUsers />} label="Users" />
+        <NavItem to="/admin-messages" icon={<FaEnvelope />} label="Messages" />
 
         <Nav.Link
           as={Link}
           to="/logout"
-          className="d-flex align-items-center text-danger py-2 justify-content-center"
+          className="d-flex align-items-center text-danger py-2 mt-auto justify-content-start"
         >
           <FaSignOutAlt className="me-2" /> Logout
         </Nav.Link>
@@ -281,5 +101,78 @@ const Sidebar = () => {
     </div>
   );
 };
+
+// Komponenti për navigim të thjeshtë
+const NavItem = ({ to, icon, label }) => (
+  <Nav.Link
+    as={Link}
+    to={to}
+    className="d-flex align-items-center text-dark py-2 px-2 rounded mb-1"
+    style={{
+      transition: 'all 0.3s ease',
+    }}
+    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e6eaf0'}
+    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+  >
+    {icon} <span className="ms-2">{label}</span>
+  </Nav.Link>
+);
+
+// Komponenti për dropdown
+const DropdownItem = ({ icon, label, show, onMouseEnter, onMouseLeave, items }) => (
+  <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} style={{ position: 'relative' }}>
+    <div
+      className="d-flex align-items-center text-dark py-2 px-2 rounded mb-1"
+      style={{ fontWeight: 'bold', cursor: 'pointer' }}
+    >
+      {icon} <span className="ms-2">{label}</span>
+    </div>
+
+    {show && (
+      <div
+        className="bg-white shadow rounded border"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '100%',
+          minWidth: '220px',
+          padding: '10px',
+          display: 'flex',
+          gap: '10px',
+          zIndex: 1100,
+        }}
+      >
+        {items.map((group, i) => (
+          <div key={i} style={{ minWidth: '100px' }}>
+            <div
+              style={{
+                fontSize: '0.95rem',
+                fontWeight: 'bold',
+                marginBottom: '8px',
+                borderBottom: '1px solid #ccc',
+                paddingBottom: '4px',
+                textAlign: 'center',
+              }}
+            >
+              {group.title}
+            </div>
+            <Nav className="flex-column">
+              {group.links.map((link, idx) => (
+                <Nav.Link
+                  key={idx}
+                  as={Link}
+                  to={link.to}
+                  style={{ fontSize: '0.95rem', color: '#333' }}
+                >
+                  {link.label}
+                </Nav.Link>
+              ))}
+            </Nav>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+);
 
 export default Sidebar;
