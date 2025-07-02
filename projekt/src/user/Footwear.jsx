@@ -69,7 +69,7 @@ const Footwear = () => {
   };
 
   return (
-    <div className="d-flex min-vh-100" style={{ backgroundColor: '#F0F0F0' }}>
+    <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0e6f6' }}>
       <USidebar />
 
       <div className="container mt-4">

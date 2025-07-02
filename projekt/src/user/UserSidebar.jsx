@@ -33,7 +33,7 @@ const USidebar = () => {
       className="d-flex flex-column flex-shrink-0 p-4 shadow-sm"
       style={{
         fontSize: '1rem',
-        backgroundColor: '#F9FAFB',
+        backgroundColor: '#ece8ff', 
         color: '#1F2937',
         minHeight: '100vh',
         borderRight: '1px solid #E5E7EB'

@@ -173,7 +173,7 @@ const UserCart = () => {
 
   if (orderPlaced && orderDetails) {
     return (
-      <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0f0f0' }}>
+      <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0e6f6' }}>
         <USidebar />
         <div className="container mt-4">
           <h2>Thank you for your order!</h2>
@@ -222,7 +222,7 @@ const UserCart = () => {
   }
 
   return (
-    <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0f0f0' }}>
+    <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0e6f6' }}>
       <USidebar />
       <div className="container mt-4">
         <h2 className="text-center mb-4">🛒 Your Cart</h2>

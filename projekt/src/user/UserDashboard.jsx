@@ -27,7 +27,7 @@ const UDashboard = () => {
   }, []);
 
   return (
-    <div className="d-flex min-vh-100 bg-light">
+        <div className="d-flex min-vh-100" style={{ backgroundColor: '#f0e6f6' }}>
       {/* 🔹 Sidebar */}
       <USidebar />
 
