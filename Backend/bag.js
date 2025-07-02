@@ -40,7 +40,7 @@ router.post("/", upload.single("cover"), (req, res) => {
   const values = [
     req.body.name,
     req.body.price,
-    req.file ? req.file.filename : null, // ✅ Ruaj vetëm emrin e skedarit
+    req.file ? `/uploads/${req.file.filename}` : null,
   ];
 
   db.query(q, [values], (err, data) => {
@@ -58,7 +58,7 @@ router.put("/:id", upload.single("cover"), (req, res) => {
     if (result.length === 0) return res.status(404).json({ message: "bag not found" });
 
     const oldCover = result[0].cover;
-    const newCover = req.file ? req.file.filename : oldCover;
+   const newCover = req.file ? `/uploads/${req.file.filename}` : oldCover;
 
     const q = "UPDATE bag SET `name` = ?, `price` = ?, `cover` = ? WHERE id = ?";
     const values = [req.body.name, req.body.price, newCover, bagId];

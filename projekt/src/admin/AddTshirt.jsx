@@ -44,7 +44,7 @@ const AddTshirt = () => {
       await axios.post("http://localhost:3002/tshirt", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      navigate("/tshirt");
+      navigate("/tshirt-men");
     } catch (err) {
       console.error("Error adding T-shirt:", err);
     }
