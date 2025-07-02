@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Signup = () => {
   const [values, setValues] = useState({ name: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validate = (values) => {
@@ -34,6 +34,7 @@ const Signup = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+      setLoading(true);
       try {
         const res = await axios.post('http://localhost:3002/v1/register', values);
         const { token, userId, userName, userEmail, role } = res.data;
@@ -51,45 +52,101 @@ const Signup = () => {
       } catch (err) {
         console.error('Signup error:', err);
         setServerError(err.response?.data?.message || 'Ndodhi një gabim. Ju lutemi provoni përsëri.');
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-4">
-          <div className="card shadow-lg border-light">
-            <div className="card-body p-5">
-              <h2 className="card-title text-center mb-4 text-primary">Regjistrohu</h2>
+    <div className="signup-wrapper d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="signup-card shadow p-4 rounded-4 bg-white" style={{ width: 380 }}>
+        <h2 className="text-center mb-4 fw-bold text-primary">Regjistrohu</h2>
 
-              {serverError && <div className="alert alert-danger">{serverError}</div>}
+        {serverError && <div className="alert alert-danger">{serverError}</div>}
 
-              <form onSubmit={handleSubmit}>
-                {['name', 'email', 'password'].map(field => (
-                  <div className="form-floating mb-3" key={field}>
-                    <input
-                      type={field === 'password' ? 'password' : 'text'}
-                      className={`form-control ${errors[field] ? 'is-invalid' : ''}`}
-                      id={field}
-                      name={field}
-                      placeholder={field === 'name' ? 'Emri' : field === 'email' ? 'Email' : 'Fjalëkalimi'}
-                      value={values[field]}
-                      onChange={handleInputChange}
-                    />
-                    <label htmlFor={field}>{field === 'name' ? 'Emri' : field === 'email' ? 'Email' : 'Fjalëkalimi'}</label>
-                    {errors[field] && <div className="invalid-feedback">{errors[field]}</div>}
-                  </div>
-                ))}
-                <div className="d-grid gap-2 mb-3">
-                  <button type="submit" className="btn btn-primary btn-lg">Regjistrohu</button>
-                </div>
-              </form>
-
-            </div>
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="mb-3 form-floating">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={values.name}
+              onChange={handleInputChange}
+              className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+              placeholder="Emri"
+              autoComplete="name"
+            />
+            <label htmlFor="name">Emri</label>
+            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
           </div>
+
+          <div className="mb-3 form-floating">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={values.email}
+              onChange={handleInputChange}
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+              placeholder="Email"
+              autoComplete="email"
+            />
+            <label htmlFor="email">Email</label>
+            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+          </div>
+
+          <div className="mb-4 form-floating">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={values.password}
+              onChange={handleInputChange}
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+              placeholder="Fjalëkalimi"
+              autoComplete="new-password"
+            />
+            <label htmlFor="password">Fjalëkalimi</label>
+            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary w-100 fw-semibold py-2 mb-3"
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            ) : (
+              'Regjistrohu'
+            )}
+          </button>
+        </form>
+
+        <div className="mt-3 text-center">
+          <p className="mb-0">
+            Ke llogari?{' '}
+            <button className="btn btn-link p-0 fw-semibold" onClick={() => navigate('/login')}>
+              Kyçu këtu
+            </button>
+          </p>
         </div>
+
       </div>
+
+      <style>{`
+        .signup-wrapper {
+          background: #f8f9fa;
+        }
+        .signup-card {
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          transition: box-shadow 0.3s ease;
+        }
+        .signup-card:hover {
+          box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+      `}</style>
     </div>
   );
 };

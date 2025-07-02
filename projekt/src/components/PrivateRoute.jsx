@@ -8,16 +8,35 @@ const PrivateRoute = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+   
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = params.get('token');
+    const urlRefreshToken = params.get('refreshToken');
+    const urlUserId = params.get('userId');
+    const urlUserName = params.get('userName');
+    const urlUserEmail = params.get('userEmail');
+    const urlUserRole = params.get('role');
+
+    if (urlToken && urlRefreshToken) {
+      localStorage.setItem('token', urlToken);
+      localStorage.setItem('refreshToken', urlRefreshToken);
+      if (urlUserId) localStorage.setItem('userId', urlUserId);
+      if (urlUserName) localStorage.setItem('userName', urlUserName);
+      if (urlUserEmail) localStorage.setItem('userEmail', urlUserEmail);
+      if (urlUserRole) localStorage.setItem('userRole', urlUserRole);
+
+     
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
       const refreshToken = localStorage.getItem('refreshToken');
 
       if (token) {
-        // Token ekziston, jemi të loguar
         setIsAuthenticated(true);
         setIsLoading(false);
       } else if (refreshToken) {
-        // Nuk kemi access token, por kemi refresh token, provojmë rifreskimin
         try {
           const res = await axios.post(
             'http://localhost:3002/token/refresh',
@@ -31,17 +50,17 @@ const PrivateRoute = ({ children }) => {
           setIsLoading(false);
         } catch (err) {
           console.error('Refresh token failed:', err);
-
-          // Nëse refresh token nuk funksionon, fshijmë tokenat dhe ridrejtojmë në login
           localStorage.removeItem('token');
           localStorage.removeItem('refreshToken');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userName');
+          localStorage.removeItem('userEmail');
+          localStorage.removeItem('userRole');
           setIsAuthenticated(false);
           setIsLoading(false);
-
           navigate('/login', { replace: true });
         }
       } else {
-        // As token dhe as refresh token nuk ekzistojnë
         setIsAuthenticated(false);
         setIsLoading(false);
         navigate('/login', { replace: true });

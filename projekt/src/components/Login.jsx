@@ -51,56 +51,97 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:3002/auth/google'; // Ndrysho sipas backend-it
+  };
+
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-4">
-          <div className="card shadow-lg border-light">
-            <div className="card-body p-5">
-              <h2 className="card-title text-center mb-4 text-primary">Kyçu</h2>
+    <div className="login-wrapper d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="login-card shadow p-4 rounded-4 bg-white">
+        <h2 className="text-center mb-4 fw-bold text-primary">Kyçu në llogarinë tënde</h2>
 
-              {serverError && <div className="alert alert-danger">{serverError}</div>}
+        {serverError && <div className="alert alert-danger">{serverError}</div>}
 
-              <form onSubmit={handleSubmit}>
-                <div className="form-floating mb-3">
-                  <input
-                    type="email"
-                    name="email"
-                    value={values.email}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Enter your email"
-                  />
-                  <label htmlFor="email">Email</label>
-                  {errors.email && <small className="text-danger">{errors.email}</small>}
-                </div>
-
-                <div className="form-floating mb-3">
-                  <input
-                    type="password"
-                    name="password"
-                    value={values.password}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Enter your password"
-                  />
-                  <label htmlFor="password">Fjalëkalimi</label>
-                  {errors.password && <small className="text-danger">{errors.password}</small>}
-                </div>
-
-                <div className="d-grid gap-2 mb-3">
-                  <button type="submit" className="btn btn-primary btn-lg">Kyçu</button>
-                </div>
-              </form>
-
-              <div className="text-center mt-3">
-                <p>Nuk ke një llogari? <button className="btn btn-link p-0" onClick={() => navigate('/signup')}>Krijo një llogari</button></p>
-              </div>
-
-            </div>
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label fw-semibold">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={values.email}
+              onChange={handleInputChange}
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+              placeholder="Shkruaj email-in"
+              autoComplete="username"
+            />
+            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
           </div>
+
+          <div className="mb-4">
+            <label htmlFor="password" className="form-label fw-semibold">Fjalëkalimi</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={values.password}
+              onChange={handleInputChange}
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+              placeholder="Shkruaj fjalëkalimin"
+              autoComplete="current-password"
+            />
+            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+          </div>
+
+          <button type="submit" className="btn btn-primary w-100 fw-semibold py-2 mb-3">
+            Kyçu
+          </button>
+        </form>
+
+        <div className="text-center mb-3 text-muted">— ose —</div>
+
+        <button
+          onClick={handleGoogleLogin}
+          className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold py-2"
+          type="button"
+        >
+          <img
+            src="https://developers.google.com/identity/images/g-logo.png"
+            alt="Google Logo"
+            style={{ width: 24, height: 24 }}
+          />
+          Kyçu me Google
+        </button>
+
+        <div className="mt-4 text-center">
+          <p className="mb-0">
+            Nuk ke llogari?{' '}
+            <button className="btn btn-link p-0 fw-semibold" onClick={() => navigate('/signup')}>
+              Krijo një llogari
+            </button>
+          </p>
         </div>
       </div>
+
+      {/* Shto stilin CSS direkt këtu */}
+      <style>{`
+        .login-wrapper {
+          background: #f8f9fa;
+        }
+        .login-card {
+          width: 380px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+          transition: box-shadow 0.3s ease;
+        }
+        .login-card:hover {
+          box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .btn-outline-danger:hover {
+          background-color: #ea4335;
+          color: white;
+          border-color: #ea4335;
+        }
+      `}</style>
     </div>
   );
 };

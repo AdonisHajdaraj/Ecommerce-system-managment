@@ -183,32 +183,32 @@ const App = () => {
       {/* User routes */}
       <Route path="/user-dashboard" element={<PrivateRoute><UDashboard /></PrivateRoute>} />
       <Route path="/user-sidebar" element={<PrivateRoute><USidebar /></PrivateRoute>} />
-      <Route path="/clothing" element={<Clothing />} />
-      <Route path="/all-tshirts" element={<AllTshirts />} />
-      <Route path="/user-tshirt-men" element={<UserTshirt />} />
-      <Route path="/user-tshirt-women" element={<UserTshirtWomen />} />
-      <Route path="/user-tshirt-kids" element={<UserTshirtKids />} />
-      <Route path="/all-hoodies" element={<AllHoodies />} />
-      <Route path="/user-hoodie-men" element={<UserHoodieMen />} />
-      <Route path="/user-hoodie-women" element={<UserHoodieWomen />} />
-      <Route path="/user-hoodie-kids" element={<UserHoodieKids />} />
-      <Route path="/all-pants" element={<AllPants />} />
-      <Route path="/user-pants-men" element={<UserPants />} />
-      <Route path="/user-pants-women" element={<UserPantsWomen />} />
-      <Route path="/user-pants-kids" element={<UserPantsKids />} />
-      <Route path="/all-shoes" element={<AllShoes />} />
-      <Route path="/footwear" element={<Footwear />} />
-      <Route path="/user-shoes" element={<UserShoes />} />
-      <Route path="/user-shoes-women" element={<UserShoesWomen />} />
-      <Route path="/user-shoes-kids" element={<UserShoesKids />} />
-      <Route path="/user-bag" element={<UserBag />} />
-      <Route path="/user-hat" element={<UserHat />} />
+      <Route path="/clothing" element={<PrivateRoute><Clothing /></PrivateRoute>} />
+      <Route path="/all-tshirts" element={<PrivateRoute><AllTshirts /></PrivateRoute>} />
+      <Route path="/user-tshirt-men" element={<PrivateRoute><UserTshirt /></PrivateRoute>} />
+      <Route path="/user-tshirt-women" element={<PrivateRoute><UserTshirtWomen /></PrivateRoute>} />
+      <Route path="/user-tshirt-kids" element={<PrivateRoute><UserTshirtKids /></PrivateRoute>} />
+      <Route path="/all-hoodies" element={<PrivateRoute><AllHoodies /></PrivateRoute>} />
+      <Route path="/user-hoodie-men" element={<PrivateRoute><UserHoodieMen /></PrivateRoute>} />
+      <Route path="/user-hoodie-women" element={<PrivateRoute><UserHoodieWomen /></PrivateRoute>} />
+      <Route path="/user-hoodie-kids" element={<PrivateRoute><UserHoodieKids /></PrivateRoute>} />
+      <Route path="/all-pants" element={<PrivateRoute><AllPants /></PrivateRoute>} />
+      <Route path="/user-pants-men" element={<PrivateRoute><UserPants /></PrivateRoute>} />
+      <Route path="/user-pants-women" element={<PrivateRoute><UserPantsWomen /></PrivateRoute>} />
+      <Route path="/user-pants-kids" element={<PrivateRoute><UserPantsKids /></PrivateRoute>} />
+      <Route path="/all-shoes" element={<PrivateRoute><AllShoes /></PrivateRoute>} />
+      <Route path="/footwear" element={<PrivateRoute><Footwear /></PrivateRoute>} />
+      <Route path="/user-shoes" element={<PrivateRoute><UserShoes /></PrivateRoute>} />
+      <Route path="/user-shoes-women" element={<PrivateRoute><UserShoesWomen /></PrivateRoute>} />
+      <Route path="/user-shoes-kids" element={<PrivateRoute><UserShoesKids /></PrivateRoute>} />
+      <Route path="/user-bag" element={<PrivateRoute><UserBag /></PrivateRoute>} />
+      <Route path="/user-hat" element={<PrivateRoute><UserHat /></PrivateRoute>} />
 
-      <Route path="/user-products" element={<UProducts />} />
-      <Route path="/user-cart" element={<UserCart />} />
+      <Route path="/user-products" element={<PrivateRoute><UProducts /></PrivateRoute>} />
+      <Route path="/user-cart" element={<PrivateRoute><UserCart /> </PrivateRoute>} />
 
       {/* Contact */}
-      <Route path="/user-contactus" element={<Contactus />} />
+      <Route path="/user-contactus" element={<PrivateRoute><Contactus /></PrivateRoute>} />
 
       {/* Logout */}
       <Route path="/logout" element={<Logout />} />

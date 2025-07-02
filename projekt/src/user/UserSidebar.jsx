@@ -33,7 +33,7 @@ const USidebar = () => {
       className="d-flex flex-column flex-shrink-0 p-4 shadow-sm"
       style={{
         fontSize: '1rem',
-        backgroundColor: '#ece8ff', 
+        backgroundColor: '#F9FAFB',
         color: '#1F2937',
         minHeight: '100vh',
         borderRight: '1px solid #E5E7EB'
@@ -129,47 +129,102 @@ const ClothingDropdown = () => (
     <div className="d-flex justify-content-between mb-3">
       {/* T-Shirts */}
       <div style={{ width: '48%' }}>
-        <strong className="d-block mb-1 border-bottom pb-1">T-Shirts</strong>
+        
         <Nav className="flex-column">
-          <Nav.Link as={Link} to="/user-tshirt-men">Men</Nav.Link>
-          <Nav.Link as={Link} to="/user-tshirt-women">Women</Nav.Link>
-          <Nav.Link as={Link} to="/user-tshirt-kids">Kids</Nav.Link>
+          <Nav.Link
+            as={Link}
+            to="/all-tshirts"
+            style={{ color: 'black', fontWeight: 'bold', paddingBottom: '3px' }}
+          >
+             T-Shirts
+          </Nav.Link>
+          <Nav.Link as={Link} to="/user-tshirt-men" style={{ color: 'black' }}>
+            Men
+          </Nav.Link>
+          <Nav.Link as={Link} to="/user-tshirt-women" style={{ color: 'black' }}>
+            Women
+          </Nav.Link>
+          <Nav.Link as={Link} to="/user-tshirt-kids" style={{ color: 'black' }}>
+            Kids
+          </Nav.Link>
         </Nav>
       </div>
 
       {/* Hoodies */}
       <div style={{ width: '48%' }}>
-        <strong className="d-block mb-1 border-bottom pb-1">Hoodies</strong>
+        
         <Nav className="flex-column">
-          <Nav.Link as={Link} to="/user-hoodie-men">Men</Nav.Link>
-          <Nav.Link as={Link} to="/user-hoodie-women">Women</Nav.Link>
-          <Nav.Link as={Link} to="/user-hoodie-kids">Kids</Nav.Link>
+          <Nav.Link
+            as={Link}
+            to="/all-hoodies"
+            style={{ color: 'black', fontWeight: 'bold', paddingBottom: '3px' }}
+          >
+            Hoodies
+          </Nav.Link>
+          <Nav.Link as={Link} to="/user-hoodie-men" style={{ color: 'black' }}>
+            Men
+          </Nav.Link>
+          <Nav.Link as={Link} to="/user-hoodie-women" style={{ color: 'black' }}>
+            Women
+          </Nav.Link>
+          <Nav.Link as={Link} to="/user-hoodie-kids" style={{ color: 'black' }}>
+            Kids
+          </Nav.Link>
         </Nav>
       </div>
     </div>
 
     {/* Pants */}
     <div>
-      <strong className="d-block mb-1 border-bottom pb-1">Pants</strong>
+      
       <Nav className="flex-column">
-        <Nav.Link as={Link} to="/user-pants-men">Men</Nav.Link>
-        <Nav.Link as={Link} to="/user-pants-women">Women</Nav.Link>
-        <Nav.Link as={Link} to="/user-pants-kids">Kids</Nav.Link>
+        <Nav.Link
+          as={Link}
+          to="/all-pants"
+          style={{ color: 'black', fontWeight: 'bold', paddingBottom: '3px' }}
+        >
+          Pants
+        </Nav.Link>
+        <Nav.Link as={Link} to="/user-pants-men" style={{ color: 'black' }}>
+          Men
+        </Nav.Link>
+        <Nav.Link as={Link} to="/user-pants-women" style={{ color: 'black' }}>
+          Women
+        </Nav.Link>
+        <Nav.Link as={Link} to="/user-pants-kids" style={{ color: 'black' }}>
+          Kids
+        </Nav.Link>
       </Nav>
     </div>
   </div>
 );
 
+
+// 🔸 Footwear Dropdown Content
 // 🔸 Footwear Dropdown Content
 const FootwearDropdown = () => (
   <div>
-    <strong className="d-block mb-1 border-bottom pb-1">Shoes</strong>
+    
     <Nav className="flex-column">
-      <Nav.Link as={Link} to="/user-shoes">Men</Nav.Link>
-      <Nav.Link as={Link} to="/user-shoes-women">Women</Nav.Link>
-      <Nav.Link as={Link} to="/user-shoes-kids">Kids</Nav.Link>
+      <Nav.Link
+        as={Link}
+        to="/all-shoes"
+        style={{ color: 'black', fontWeight: 'bold', paddingBottom: '3px' }}
+      >
+        Shoes
+      </Nav.Link>
+      <Nav.Link as={Link} to="/user-shoes" style={{ color: 'black' }}>
+        Men
+      </Nav.Link>
+      <Nav.Link as={Link} to="/user-shoes-women" style={{ color: 'black' }}>
+        Women
+      </Nav.Link>
+      <Nav.Link as={Link} to="/user-shoes-kids" style={{ color: 'black' }}>
+        Kids
+      </Nav.Link>
     </Nav>
   </div>
 );
+
 
 export default USidebar;
